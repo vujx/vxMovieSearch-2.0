@@ -19,7 +19,7 @@ class FavoriteMoviesRepository @Inject constructor(private val appDatabase: AppD
 
     fun getAllFavoriteMovies() = favoriteMoviesDao.getAllFavoritesMovies()
 
-    fun removeMovie(id: Int) {
+    fun removeMovie(id: String) {
         databaseExecutor.execute {
             favoriteMoviesDao.removeFavoriteMovie(id)
         }

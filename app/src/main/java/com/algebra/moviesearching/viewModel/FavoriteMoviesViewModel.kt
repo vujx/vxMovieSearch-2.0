@@ -15,7 +15,7 @@ class FavoriteMoviesViewModel @Inject constructor(private val repo: FavoriteMovi
         repo.insertFavoriteMovie(movie)
     }
 
-    fun removeMovieFromFavorite(id: Int){
+    fun removeMovieFromFavorite(id: String){
         repo.removeMovie(id)
     }
 

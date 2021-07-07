@@ -16,8 +16,12 @@ data class MovieDetail (
     val imdbRating: String,
 
     @field: Json(name = "Plot")
-    val description: String
+    val description: String,
 
-){
+    @field: Json(name = "Genre")
+    val genre: String,
 
-}
+    @field: Json(name = "Poster")
+    val pictureURL: String
+
+)

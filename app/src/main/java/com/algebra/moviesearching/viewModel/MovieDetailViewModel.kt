@@ -2,12 +2,12 @@ package com.algebra.moviesearching.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.algebra.moviesearching.model.Movie
 import com.algebra.moviesearching.model.MovieDetail
 import com.algebra.moviesearching.repository.MovieDetailRepository
-import com.algebra.moviesearching.repository.SearchMoviesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class MovieDetailViewModel @Inject constructor(private val repo: MovieDetailRepository): ViewModel() {
 
     var errorObserver: MutableLiveData<String> = MutableLiveData()

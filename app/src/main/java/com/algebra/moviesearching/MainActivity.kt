@@ -1,25 +1,18 @@
 package com.algebra.moviesearching
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.algebra.moviesearching.constants.Constants
 import com.algebra.moviesearching.databinding.ActivityMainBinding
+import com.algebra.moviesearching.dialog.DialogExit
 import com.algebra.moviesearching.list.FavoriteAdapter
-import com.algebra.moviesearching.search.SearchMoviesActivity
 import com.algebra.moviesearching.viewModel.FavoriteMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -28,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter = FavoriteAdapter(this)
     private lateinit var searchView: SearchView
     private val viewModelFavorite: FavoriteMoviesViewModel by viewModels()
+    private var searchAction = SearchAction(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,9 +32,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
-        viewModelFavorite.getAllFavoriteMovies().observe(this, Observer {
+        viewModelFavorite.getAllFavoriteMovies().observe(this, {
             adapter.setList(it)
             if(it.isEmpty()){
                 binding.tvTitleFavorite.text = "Favorite"
@@ -51,6 +46,17 @@ class MainActivity : AppCompatActivity() {
             }
             binding.progressBar.visibility = View.GONE
         })
+        searchAction.checkIfSubmit = false
+    }
+
+    override fun onBackPressed() {
+        val dialog = DialogExit("Are you sure you want to exit?")
+        dialog.show(supportFragmentManager, "Logout")
+        dialog.listener = object : DialogExit.ListenerForDialog {
+            override fun okPress(isPress: Boolean) {
+                finishAffinity()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -58,46 +64,20 @@ class MainActivity : AppCompatActivity() {
         val searchItem = menu?.findItem(R.id.searchIcon)
         searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Enter movie"
+        searchAction.searchAction(searchView)
 
-        Observable.create<String> { emiter ->
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        if(it.isNotEmpty()){
-                            val intent = Intent(this@MainActivity, SearchMoviesActivity::class.java)
-                            intent.putExtra(Constants.SEARCH_VALUE, it)
-                            startActivity(intent)
-                        }
-                    }
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    newText?.let {
-                        if (!emiter.isDisposed)
-                            emiter.onNext(newText)
-                    }
-                    return true
-                }
-            })
-        }.debounce(1, TimeUnit.SECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                when {
-                    it.length >= 3-> {
-                        Log.d("ispsisovo", it)
-                        val intent = Intent(this@MainActivity, SearchMoviesActivity::class.java)
-                        intent.putExtra(Constants.SEARCH_VALUE, it)
-                        startActivity(intent)
-                    }
-                }
-            }
         return super.onCreateOptionsMenu(menu)
     }
+
 
     private fun setUpRecyclerView(){
         binding.rvFavorite.layoutManager = LinearLayoutManager(this)
         binding.rvFavorite.adapter = adapter
+
+        adapter.listener = object: FavoriteAdapter.Listener{
+            override fun onFavClick(imdbId: String) {
+                viewModelFavorite.removeMovieFromFavorite(imdbId)
+            }
+        }
     }
 }
