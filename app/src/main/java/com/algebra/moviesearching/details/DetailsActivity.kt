@@ -24,7 +24,10 @@ class DetailsActivity : AppCompatActivity() {
 
         intent.getStringExtra(Constants.IMDB_ID)?.let { viewModelDetails.getMovieDetails(it) }
         setUpToolbar()
+    }
 
+    override fun onResume() {
+        super.onResume()
         observerAction.bind(viewModelDetails, binding, this)
     }
 

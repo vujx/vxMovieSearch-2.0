@@ -13,7 +13,7 @@ data class MovieDetails(
     val title: String,
 
     @field: Json(name = "Year")
-    val year: String,
+    var year: String,
 
     @field: Json(name = "Poster")
     val pictureUrl: String,

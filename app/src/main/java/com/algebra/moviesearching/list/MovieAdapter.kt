@@ -2,6 +2,7 @@ package com.algebra.moviesearching.list
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -15,11 +16,12 @@ class MovieAdapter(private val activity: AppCompatActivity, private val listOfFa
 
     private val listOfMovies = mutableListOf<MovieDetails>()
     var listener: Listener? = null
+    private var yearBefore = ""
 
     fun setList(list: List<MovieDetails>){
         listOfMovies.clear()
         listOfMovies.addAll(list)
-        listOfMovies.sortByDescending {
+        listOfMovies.sortBy {
             it.year
         }
         notifyDataSetChanged()
@@ -41,6 +43,7 @@ class MovieAdapter(private val activity: AppCompatActivity, private val listOfFa
                         break
                     }
                 }
+
                 if(!checkIfExist){
                     itemMovie.ivFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_24)
                     listener?.onFavClick(FavoriteMovie(0, movie.title, movie.year, movie.pictureUrl, movie.imdbId), false)
@@ -54,6 +57,13 @@ class MovieAdapter(private val activity: AppCompatActivity, private val listOfFa
         }
 
         fun bind(movie: MovieDetails){
+            if(movie.year.length > 4)
+                movie.year = movie.year.substring(0, 4)
+            if(movie.year == listOfMovies[layoutPosition].year && yearBefore != movie.year) {
+                itemMovie.tvYear.text = movie.year
+                yearBefore = movie.year
+            } else itemMovie.tvYear.visibility = View.GONE
+
             itemMovie.tvTitle.text = movie.title
             Glide.with(activity)
                 .load(movie.pictureUrl)

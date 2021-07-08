@@ -14,25 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <ImageView
             android:id="@+id/imMovie"
-            android:layout_width="100dp"
-            android:layout_height="140dp"
-            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/mainPicture" />
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            style="@style/title"
             app:layout_constraintEnd_toStartOf="@id/ivFavorite"
             app:layout_constraintStart_toEndOf="@id/imMovie"
             app:layout_constraintTop_toTopOf="@id/imMovie" />

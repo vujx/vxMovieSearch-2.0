@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.algebra.moviesearching.MainActivity
@@ -15,6 +16,7 @@ import com.algebra.moviesearching.databinding.ActivitySearchMoviesBinding
 import com.algebra.moviesearching.list.MovieAdapter
 import com.algebra.moviesearching.model.FavoriteMovie
 import com.algebra.moviesearching.viewModel.FavoriteMoviesViewModel
+import com.algebra.moviesearching.viewModel.SearchHistoryViewModel
 import com.algebra.moviesearching.viewModel.SearchMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,24 +30,26 @@ class SearchMoviesActivity : AppCompatActivity() {
     private val listOfFavMovies = mutableListOf<FavoriteMovie>()
     private val viewModelFavoriteMovie: FavoriteMoviesViewModel by viewModels()
     private val searchAction = SearchActionMovies()
-    private val observerActions = ObserverAction()
+    private lateinit var observerActions: ObserverAction
     private val clickListeners = ClickListeners()
+    private val viewModelSearchHistory: SearchHistoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivitySearchMoviesBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        setUpToolbar()
+        searchAction.searchResult = intent.getStringExtra(Constants.SEARCH_VALUE) ?: ""
 
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenStarted {
             listOfFavMovies.addAll(viewModelFavoriteMovie.getAllFavMoviesCour())
             adapter = MovieAdapter(this@SearchMoviesActivity, listOfFavMovies)
+            observerActions = ObserverAction(viewModelMovies, searchAction.searchResult, this@SearchMoviesActivity, binding, adapter, viewModelSearchHistory)
             setUpRecyclerView()
-            observerActions.bind(viewModelMovies, searchAction.searchResult, this@SearchMoviesActivity, binding, adapter)
+            observerActions.bind()
+            observerActions.searchActionAfterSubmit()
         }
-
-        searchAction.searchResult = intent.getStringExtra(Constants.SEARCH_VALUE) ?: ""
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,8 +58,16 @@ class SearchMoviesActivity : AppCompatActivity() {
         searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Enter movie"
 
-       searchAction.searchAction(viewModelMovies, searchView)
+       searchAction.searchAction(searchView, observerActions)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun setUpToolbar(){
+        binding.toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_back_24)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener {
+            super.onBackPressed()
+        }
     }
 
     private fun setUpRecyclerView(){
@@ -63,11 +75,10 @@ class SearchMoviesActivity : AppCompatActivity() {
         binding.rvSearchMovies.adapter = adapter
 
         clickListeners.clickListeners(viewModelFavoriteMovie, adapter, listOfFavMovies, this)
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        binding.swipeRefresh.setOnRefreshListener {
+            observerActions.searchActionAfterSubmit()
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 }

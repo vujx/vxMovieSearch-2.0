@@ -1,6 +1,8 @@
 package com.algebra.moviesearching
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -8,7 +10,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.algebra.moviesearching.constants.Constants
 import com.algebra.moviesearching.databinding.ActivityMainBinding
+import com.algebra.moviesearching.details.DetailsActivity
 import com.algebra.moviesearching.dialog.DialogExit
 import com.algebra.moviesearching.list.FavoriteAdapter
 import com.algebra.moviesearching.viewModel.FavoriteMoviesViewModel
@@ -77,6 +81,13 @@ class MainActivity : AppCompatActivity() {
         adapter.listener = object: FavoriteAdapter.Listener{
             override fun onFavClick(imdbId: String) {
                 viewModelFavorite.removeMovieFromFavorite(imdbId)
+            }
+
+            override fun onItemClick(imdbId: String) {
+                val intent = Intent(this@MainActivity, DetailsActivity::class.java)
+                intent.putExtra(Constants.IMDB_ID, imdbId)
+                val bundle = ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
+                startActivity(intent, bundle)
             }
         }
     }
