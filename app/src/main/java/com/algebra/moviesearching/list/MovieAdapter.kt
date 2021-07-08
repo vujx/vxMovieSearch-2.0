@@ -12,9 +12,10 @@ import com.algebra.moviesearching.model.FavoriteMovie
 import com.algebra.moviesearching.model.MovieDetails
 import com.bumptech.glide.Glide
 
-class MovieAdapter(private val activity: AppCompatActivity, private val listOfFav: MutableList<FavoriteMovie>): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private val activity: AppCompatActivity,  val listOfFav: MutableList<FavoriteMovie>): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private val listOfMovies = mutableListOf<MovieDetails>()
+    val listOfMovies = mutableListOf<MovieDetails>()
+
     var listener: Listener? = null
     private var yearBefore = ""
 
@@ -73,6 +74,7 @@ class MovieAdapter(private val activity: AppCompatActivity, private val listOfFa
             listOfFav.forEach {
                 if(movie.imdbId == it.imdbId) checkIfExist = true
             }
+            Log.d("vidio", checkIfExist.toString())
             if(checkIfExist) itemMovie.ivFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_24)
             else itemMovie.ivFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24)
         }

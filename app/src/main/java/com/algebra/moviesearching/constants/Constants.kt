@@ -9,4 +9,5 @@ object Constants {
 
     const val SEARCH_VALUE = "Search_value"
     const val IMDB_ID = "Imdb_id"
+    const val IS_FAV = "Fav"
 }

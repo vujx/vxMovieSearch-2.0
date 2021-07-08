@@ -1,6 +1,5 @@
 package com.algebra.moviesearching.search
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,10 +8,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.algebra.moviesearching.MainActivity
 import com.algebra.moviesearching.R
 import com.algebra.moviesearching.constants.Constants
 import com.algebra.moviesearching.databinding.ActivitySearchMoviesBinding
+import com.algebra.moviesearching.details.DetailsActivity
 import com.algebra.moviesearching.list.MovieAdapter
 import com.algebra.moviesearching.model.FavoriteMovie
 import com.algebra.moviesearching.viewModel.FavoriteMoviesViewModel
@@ -60,6 +59,18 @@ class SearchMoviesActivity : AppCompatActivity() {
 
        searchAction.searchAction(searchView, observerActions)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        if(DetailsActivity.checkIfChange){
+            lifecycleScope.launchWhenResumed {
+                val list = viewModelFavoriteMovie.getAllFavMoviesCour()
+                listOfFavMovies.clear()
+                listOfFavMovies.addAll(list)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     private fun setUpToolbar(){

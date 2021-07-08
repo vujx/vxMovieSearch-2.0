@@ -22,6 +22,9 @@ data class MovieDetail (
     val genre: String,
 
     @field: Json(name = "Poster")
-    val pictureURL: String
+    val pictureURL: String,
+
+    @field: Json(name = "Year")
+    var year: String
 
 )

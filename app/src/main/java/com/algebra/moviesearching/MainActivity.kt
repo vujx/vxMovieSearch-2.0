@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(imdbId: String) {
                 val intent = Intent(this@MainActivity, DetailsActivity::class.java)
                 intent.putExtra(Constants.IMDB_ID, imdbId)
+                intent.putExtra(Constants.IS_FAV, 1)
                 val bundle = ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
                 startActivity(intent, bundle)
             }

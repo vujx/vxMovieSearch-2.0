@@ -5,14 +5,20 @@ import android.view.View
 import com.algebra.moviesearching.R
 import com.algebra.moviesearching.databinding.ActivityDetailsBinding
 import com.algebra.moviesearching.displayMessage
+import com.algebra.moviesearching.model.MovieDetail
 import com.algebra.moviesearching.viewModel.MovieDetailViewModel
 import com.bumptech.glide.Glide
 
 class ObserverActionDetails {
 
+    lateinit var movieDetail: MovieDetail
+
     @SuppressLint("SetTextI18n")
     fun bind(viewModelDetails: MovieDetailViewModel, binding: ActivityDetailsBinding, activity: DetailsActivity){
         viewModelDetails.moviesObserver.observe(activity, {
+
+            movieDetail = it
+
             binding.tvTitle.text = it.title
 
             if(it.description == "N/A") binding.tvDesc.text = "No description available!"

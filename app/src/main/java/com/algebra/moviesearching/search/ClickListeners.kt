@@ -33,6 +33,10 @@ class ClickListeners {
                 val intent = Intent(activity, DetailsActivity::class.java)
                 intent.putExtra(Constants.IMDB_ID, imdbId)
                 val bundle = ActivityOptions.makeSceneTransitionAnimation(activity).toBundle()
+                adapter.listOfFav.forEach {
+                    if(it.imdbId == imdbId)
+                        intent.putExtra(Constants.IS_FAV, 1)
+                }
                 activity.startActivity(intent, bundle)
             }
         }
