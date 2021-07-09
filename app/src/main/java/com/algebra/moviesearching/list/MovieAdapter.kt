@@ -39,6 +39,7 @@ class MovieAdapter(private val activity: AppCompatActivity, val listOfFav: Mutab
     }
 
     private fun setYears(){
+        listOfYear.clear()
         for(i: Int in 0 until listOfMovies.size){
             if(listOfMovies[i].year.length > 4)
                 listOfMovies[i].year = listOfMovies[i].year.substring(0, 4)
