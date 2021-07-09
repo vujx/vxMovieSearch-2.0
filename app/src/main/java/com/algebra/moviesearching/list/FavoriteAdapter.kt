@@ -8,6 +8,7 @@ import com.algebra.moviesearching.R
 import com.algebra.moviesearching.databinding.ItemFavoriteBinding
 import com.algebra.moviesearching.model.FavoriteMovie
 import com.bumptech.glide.Glide
+import java.util.*
 
 class FavoriteAdapter(private val activity: AppCompatActivity): RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>(){
 
@@ -18,7 +19,7 @@ class FavoriteAdapter(private val activity: AppCompatActivity): RecyclerView.Ada
         listOfFavoriteMovies.clear()
         listOfFavoriteMovies.addAll(list)
         listOfFavoriteMovies.sortBy {
-            it.title.toLowerCase()
+            it.title.toLowerCase(Locale.ROOT)
         }
         notifyDataSetChanged()
     }
@@ -39,10 +40,14 @@ class FavoriteAdapter(private val activity: AppCompatActivity): RecyclerView.Ada
             if(favoriteMovie.year.length == 4)
             itemFavorite.tvYear.text = favoriteMovie.year
             else if(favoriteMovie.year.length == 5) itemFavorite.tvYear.text = favoriteMovie.year.substring(0, 4)
+            if(favoriteMovie.picture != "N/A")
             Glide.with(activity)
                 .load(favoriteMovie.picture)
+                .skipMemoryCache(false)
                 .placeholder(R.drawable.no_image_available)
                 .into(itemFavorite.imMovie)
+            else
+                itemFavorite.imMovie.setBackgroundResource(R.drawable.no_image_available)
         }
     }
 

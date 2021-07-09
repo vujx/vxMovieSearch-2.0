@@ -1,6 +1,5 @@
 package com.algebra.moviesearching.list
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,20 +11,51 @@ import com.algebra.moviesearching.model.FavoriteMovie
 import com.algebra.moviesearching.model.MovieDetails
 import com.bumptech.glide.Glide
 
-class MovieAdapter(private val activity: AppCompatActivity,  val listOfFav: MutableList<FavoriteMovie>): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private val activity: AppCompatActivity, val listOfFav: MutableList<FavoriteMovie>): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     val listOfMovies = mutableListOf<MovieDetails>()
+    val listOfYear = mutableMapOf<Int, String>()
 
     var listener: Listener? = null
     private var yearBefore = ""
 
     fun setList(list: List<MovieDetails>){
         listOfMovies.clear()
+        yearBefore = ""
         listOfMovies.addAll(list)
         listOfMovies.sortBy {
-            it.year
+            if(it.year.length > 4)
+                it.year = it.year.substring(0, 4)
+            val year = try{
+                it.year.toInt()
+                it.year
+            } catch (e: NumberFormatException){
+                "1"
+            }
+            year.toInt()
         }
+        setYears()
         notifyDataSetChanged()
+    }
+
+    private fun setYears(){
+        for(i: Int in 0 until listOfMovies.size){
+            if(listOfMovies[i].year.length > 4)
+                listOfMovies[i].year = listOfMovies[i].year.substring(0, 4)
+
+            if(yearBefore != listOfMovies[i].year) {
+                yearBefore = listOfMovies[i].year
+                listOfYear[i] = yearBefore
+            }
+        }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
     inner class MovieViewHolder(private val itemMovie: ItemMoviesBinding): RecyclerView.ViewHolder(itemMovie.root){
@@ -53,28 +83,37 @@ class MovieAdapter(private val activity: AppCompatActivity,  val listOfFav: Muta
                     itemMovie.ivFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24)
                     listener?.onFavClick(FavoriteMovie(0, movie.title, movie.year, movie.pictureUrl, movie.imdbId), true)
                 }
-                Log.d("Ispisovo", checkIfExist.toString())
             }
         }
 
         fun bind(movie: MovieDetails){
-            if(movie.year.length > 4)
-                movie.year = movie.year.substring(0, 4)
-            if(movie.year == listOfMovies[layoutPosition].year && yearBefore != movie.year) {
+
+            var checkIfExistYear = false
+
+            listOfYear.mapKeys {
+                if(it.key == layoutPosition) checkIfExistYear = true
+            }
+
+            if(checkIfExistYear){
+                itemMovie.tvYear.visibility = View.VISIBLE
                 itemMovie.tvYear.text = movie.year
-                yearBefore = movie.year
             } else itemMovie.tvYear.visibility = View.GONE
 
             itemMovie.tvTitle.text = movie.title
-            Glide.with(activity)
-                .load(movie.pictureUrl)
-                .placeholder(R.drawable.no_image_available)
-                .into(itemMovie.imMovie)
+
+            if(movie.pictureUrl != "N/A")
+                Glide.with(activity)
+                    .load(movie.pictureUrl)
+                    .skipMemoryCache(false)
+                    .placeholder(R.drawable.no_image_available)
+                    .into(itemMovie.imMovie)
+            else itemMovie.imMovie.setBackgroundResource(R.drawable.no_image_available)
+
             var checkIfExist = false
             listOfFav.forEach {
                 if(movie.imdbId == it.imdbId) checkIfExist = true
             }
-            Log.d("vidio", checkIfExist.toString())
+
             if(checkIfExist) itemMovie.ivFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_24)
             else itemMovie.ivFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24)
         }

@@ -1,7 +1,6 @@
 package com.algebra.moviesearching.search
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.algebra.moviesearching.databinding.ActivitySearchMoviesBinding
@@ -47,7 +46,6 @@ class ObserverAction(private val viewModelMovies: SearchMoviesViewModel, var sea
                     viewModelSearchHistory.insertSearchHistory(
                         SearchHistory(0, it.title, it.year, it.pictureUrl, it.imdbId, searchResult))
                 }
-                Log.d("ajovovidi", "sadad")
             }
         })
     }
@@ -56,21 +54,15 @@ class ObserverAction(private val viewModelMovies: SearchMoviesViewModel, var sea
         activity.lifecycleScope.launchWhenResumed {
             binding.progressBar.visibility = View.VISIBLE
             val listOfSearchHistory = viewModelSearchHistory.getSearchHistory(searchResult)
-            Log.d("Ispisovulistu", listOfSearchHistory.toString())
-            Log.d("sad", searchResult)
             if (listOfSearchHistory.isNotEmpty()) {
                 val listOfMovies = mutableListOf<MovieDetails>()
                 binding.tvSearchMess.text = ""
                 listOfSearchHistory.forEach {
                     listOfMovies.add(MovieDetails(it.title, it.year, it.pictureUrl, it.imdbID))
                 }
-                Log.d("ispisdov", "dsdad")
                 binding.progressBar.visibility = View.GONE
                 adapter.setList(listOfMovies)
-            } else {
-                viewModelMovies.getAllMovies(searchResult)
-                Log.d("Jelseovo", "pozove")
-            }
+            } else viewModelMovies.getAllMovies(searchResult)
         }
     }
 }

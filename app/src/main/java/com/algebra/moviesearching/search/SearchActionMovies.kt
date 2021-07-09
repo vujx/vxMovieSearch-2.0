@@ -1,7 +1,6 @@
 package com.algebra.moviesearching.search
 
 import androidx.appcompat.widget.SearchView
-import com.algebra.moviesearching.viewModel.SearchMoviesViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

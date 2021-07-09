@@ -1,8 +1,8 @@
 package com.algebra.moviesearching.search
 
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
-import android.util.Log
 import com.algebra.moviesearching.constants.Constants
 import com.algebra.moviesearching.details.DetailsActivity
 import com.algebra.moviesearching.list.MovieAdapter
@@ -28,8 +28,8 @@ class ClickListeners {
                 }
             }
 
+            @SuppressLint("RestrictedApi")
             override fun onItemClick(imdbId: String) {
-                Log.d("ispisClick", imdbId)
                 val intent = Intent(activity, DetailsActivity::class.java)
                 intent.putExtra(Constants.IMDB_ID, imdbId)
                 val bundle = ActivityOptions.makeSceneTransitionAnimation(activity).toBundle()
@@ -38,6 +38,7 @@ class ClickListeners {
                         intent.putExtra(Constants.IS_FAV, 1)
                 }
                 activity.startActivity(intent, bundle)
+                activity.supportActionBar?.collapseActionView()
             }
         }
     }

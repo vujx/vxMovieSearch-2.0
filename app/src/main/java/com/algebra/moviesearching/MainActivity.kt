@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-
     private fun setUpRecyclerView(){
         binding.rvFavorite.layoutManager = LinearLayoutManager(this)
         binding.rvFavorite.adapter = adapter
@@ -83,12 +82,14 @@ class MainActivity : AppCompatActivity() {
                 viewModelFavorite.removeMovieFromFavorite(imdbId)
             }
 
+            @SuppressLint("RestrictedApi")
             override fun onItemClick(imdbId: String) {
                 val intent = Intent(this@MainActivity, DetailsActivity::class.java)
                 intent.putExtra(Constants.IMDB_ID, imdbId)
                 intent.putExtra(Constants.IS_FAV, 1)
                 val bundle = ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
                 startActivity(intent, bundle)
+                supportActionBar?.collapseActionView()
             }
         }
     }

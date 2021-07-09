@@ -41,14 +41,16 @@ class SearchMoviesActivity : AppCompatActivity() {
         setUpToolbar()
         searchAction.searchResult = intent.getStringExtra(Constants.SEARCH_VALUE) ?: ""
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenResumed {
             listOfFavMovies.addAll(viewModelFavoriteMovie.getAllFavMoviesCour())
             adapter = MovieAdapter(this@SearchMoviesActivity, listOfFavMovies)
             observerActions = ObserverAction(viewModelMovies, searchAction.searchResult, this@SearchMoviesActivity, binding, adapter, viewModelSearchHistory)
             setUpRecyclerView()
+            initializedSearchAction()
             observerActions.bind()
             observerActions.searchActionAfterSubmit()
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -57,7 +59,10 @@ class SearchMoviesActivity : AppCompatActivity() {
         searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Enter movie"
 
-       searchAction.searchAction(searchView, observerActions)
+        if(this::observerActions.isInitialized){
+            searchAction.searchAction(searchView, observerActions)
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -73,6 +78,11 @@ class SearchMoviesActivity : AppCompatActivity() {
         }
     }
 
+    private fun initializedSearchAction(){
+        if(this::searchView.isInitialized)
+             searchAction.searchAction(searchView, observerActions)
+    }
+
     private fun setUpToolbar(){
         binding.toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_back_24)
         setSupportActionBar(binding.toolbar)
@@ -82,6 +92,7 @@ class SearchMoviesActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView(){
+        adapter.setHasStableIds(true)
         binding.rvSearchMovies.layoutManager = LinearLayoutManager(this)
         binding.rvSearchMovies.adapter = adapter
 

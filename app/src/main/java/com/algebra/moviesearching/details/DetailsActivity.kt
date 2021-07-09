@@ -2,9 +2,6 @@ package com.algebra.moviesearching.details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.algebra.moviesearching.R
@@ -35,9 +32,10 @@ class DetailsActivity : AppCompatActivity() {
         firstFav = isFav
         imdb = intent.getStringExtra(Constants.IMDB_ID) ?: ""
         viewModelDetails.getMovieDetails(imdb)
-
-        clickListener()
         setUpToolbar()
+        if(isFav == 0) binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_24_white))
+        else binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_border_24))
+
     }
 
     override fun onResume() {
@@ -55,9 +53,7 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun clickListener(){
-        if(isFav == 0) binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_24_white))
-         else binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_border_24))
+    fun clickListener(){
         binding.ivFavMovie.setOnClickListener {
             if(isFav == 0){
                 isFav = 1
@@ -71,6 +67,11 @@ class DetailsActivity : AppCompatActivity() {
                 viewModelFavoriteMovies.removeMovieFromFavorite(imdb)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        checkIfChange = isFav != firstFav
+        super.onBackPressed()
     }
 
     companion object{

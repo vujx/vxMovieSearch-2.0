@@ -1,7 +1,7 @@
 package com.algebra.moviesearching
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.algebra.moviesearching.constants.Constants
@@ -15,6 +15,7 @@ class SearchAction(private val activity: AppCompatActivity) {
 
     var checkIfSubmit = false
 
+    @SuppressLint("RestrictedApi")
     fun searchAction(searchView: SearchView){
         Observable.create<String> { emiter ->
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -25,6 +26,7 @@ class SearchAction(private val activity: AppCompatActivity) {
                             val intent = Intent(activity, SearchMoviesActivity::class.java)
                             intent.putExtra(Constants.SEARCH_VALUE, it)
                             activity.startActivity(intent)
+                            activity.supportActionBar?.collapseActionView()
                         }
                     }
                     return false
@@ -47,6 +49,7 @@ class SearchAction(private val activity: AppCompatActivity) {
                         val intent = Intent(activity, SearchMoviesActivity::class.java)
                         intent.putExtra(Constants.SEARCH_VALUE, it)
                         activity.startActivity(intent)
+                        activity.supportActionBar?.collapseActionView()
                     }
                 }
             }
