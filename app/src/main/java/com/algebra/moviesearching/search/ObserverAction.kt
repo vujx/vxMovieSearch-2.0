@@ -27,9 +27,7 @@ class ObserverAction(private val viewModelMovies: SearchMoviesViewModel, var sea
                 it.contains("UnknownHostException") || it.contains("No address associated with hostname") ->
                     displayMessage("Check you internet connection!", activity)
                 it.contains("HTTP 404 Not Found") -> displayMessage(
-                    "GitHub Repositories not found, try again!",
-                    activity
-                )
+                    "Movie not found, try again!", activity)
                 else -> displayMessage("Something went wrong, try again!", activity)
             }
         })

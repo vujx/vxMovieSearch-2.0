@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             adapter.setList(it)
             if(it.isEmpty()){
                 binding.tvTitleFavorite.text = "Favorite"
-                binding.tvDisplayMess.text = "You don't have any favorite movies in your list.\n Search movies by name to add them"
+                binding.tvDisplayMess.text = "You don't have any favorite movies in your list.\n Search movies by name to add them."
             } else {
                 binding.tvTitleFavorite.text = ""
                 binding.tvDisplayMess.text = ""
@@ -83,11 +83,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             @SuppressLint("RestrictedApi")
-            override fun onItemClick(imdbId: String) {
+            override fun onItemClick(imdbId: String, title: String) {
                 val intent = Intent(this@MainActivity, DetailsActivity::class.java)
                 intent.putExtra(Constants.IMDB_ID, imdbId)
                 intent.putExtra(Constants.IS_FAV, 1)
                 val bundle = ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
+                intent.putExtra(Constants.TITLE, title)
                 startActivity(intent, bundle)
                 supportActionBar?.collapseActionView()
             }

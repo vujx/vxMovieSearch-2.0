@@ -31,7 +31,7 @@ class FavoriteAdapter(private val activity: AppCompatActivity): RecyclerView.Ada
             }
 
             itemView.setOnClickListener {
-                listener?.onItemClick(listOfFavoriteMovies[layoutPosition].imdbId)
+                listener?.onItemClick(listOfFavoriteMovies[layoutPosition].imdbId, listOfFavoriteMovies[layoutPosition].title)
             }
         }
 
@@ -64,6 +64,6 @@ class FavoriteAdapter(private val activity: AppCompatActivity): RecyclerView.Ada
 
     interface Listener{
         fun onFavClick(imdbId: String)
-        fun onItemClick(imdbId: String)
+        fun onItemClick(imdbId: String, title: String)
     }
 }

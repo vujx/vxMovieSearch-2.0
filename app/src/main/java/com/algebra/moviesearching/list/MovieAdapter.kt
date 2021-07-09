@@ -61,7 +61,7 @@ class MovieAdapter(private val activity: AppCompatActivity, val listOfFav: Mutab
     inner class MovieViewHolder(private val itemMovie: ItemMoviesBinding): RecyclerView.ViewHolder(itemMovie.root){
         init {
             itemView.setOnClickListener {
-                listener?.onItemClick(listOfMovies[layoutPosition].imdbId)
+                listener?.onItemClick(listOfMovies[layoutPosition].imdbId, listOfMovies[layoutPosition].title)
             }
 
             itemMovie.ivFavorite.setOnClickListener {
@@ -132,6 +132,6 @@ class MovieAdapter(private val activity: AppCompatActivity, val listOfFav: Mutab
 
     interface Listener{
         fun onFavClick(favMovie: FavoriteMovie, isFav: Boolean)
-        fun onItemClick(imdbId: String)
+        fun onItemClick(imdbId: String, title: String)
     }
 }

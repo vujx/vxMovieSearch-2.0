@@ -28,6 +28,7 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        binding.toolbar.title = intent.getStringExtra(Constants.TITLE)
         isFav = intent.getIntExtra(Constants.IS_FAV, 0)
         firstFav = isFav
         imdb = intent.getStringExtra(Constants.IMDB_ID) ?: ""
@@ -60,7 +61,7 @@ class DetailsActivity : AppCompatActivity() {
                 binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_border_24))
                 if(observerAction.movieDetail.year.length > 4)
                     observerAction.movieDetail.year = observerAction.movieDetail.year.substring(0, 4)
-                viewModelFavoriteMovies.insertMovieToFavorite(FavoriteMovie(0, observerAction.movieDetail.title, "", observerAction.movieDetail.pictureURL, imdb))
+                viewModelFavoriteMovies.insertMovieToFavorite(FavoriteMovie(0, observerAction.movieDetail.title, observerAction.movieDetail.year, observerAction.movieDetail.pictureURL, imdb))
             } else {
                 isFav = 0
                 binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_24_white))

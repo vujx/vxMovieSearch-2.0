@@ -29,7 +29,7 @@ class ClickListeners {
             }
 
             @SuppressLint("RestrictedApi")
-            override fun onItemClick(imdbId: String) {
+            override fun onItemClick(imdbId: String, title: String) {
                 val intent = Intent(activity, DetailsActivity::class.java)
                 intent.putExtra(Constants.IMDB_ID, imdbId)
                 val bundle = ActivityOptions.makeSceneTransitionAnimation(activity).toBundle()
@@ -37,6 +37,7 @@ class ClickListeners {
                     if(it.imdbId == imdbId)
                         intent.putExtra(Constants.IS_FAV, 1)
                 }
+                intent.putExtra(Constants.TITLE, title)
                 activity.startActivity(intent, bundle)
                 activity.supportActionBar?.collapseActionView()
             }
