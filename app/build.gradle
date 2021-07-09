@@ -20,9 +20,13 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField 'String', "APIKey", APIKey
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "APIKey", APIKey
         }
     }
     compileOptions {
@@ -39,6 +43,11 @@ android {
 
 dependencies {
 
+    //Unit test
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+    
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def room_version = '2.2.6'
 
@@ -79,4 +88,5 @@ dependencies {
 
     //JavaRx
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
 }
