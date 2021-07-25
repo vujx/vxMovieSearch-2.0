@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">MovieSearching</string>
-    <string name="enter_movie">Enter movie</string>
+    <string name="app_name">MovieFinder</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="BASE_URL">https://www.omdbapi.com/</string>
 </resources>
