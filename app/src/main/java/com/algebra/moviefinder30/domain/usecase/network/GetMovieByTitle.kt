@@ -6,11 +6,11 @@ import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 import java.lang.Exception
 
 class GetMovieByTitle(private val movieRepo: MovieNetworkRepository):
-    BaseUseCase<String, List<Movie>> {
+    BaseUseCase<String, List<Movie>?> {
 
-    override suspend fun execute(params: String, callback: BaseUseCase.Callback<List<Movie>>) {
+    override suspend fun execute(params: String, callback: BaseUseCase.Callback<List<Movie>?>) {
         return try{
-            val movies = movieRepo.getMoviesByTitle()
+            val movies = movieRepo.getMoviesByTitle(params)
             callback.onSuccess(movies)
         } catch(e: Exception){
             callback.onError(e)

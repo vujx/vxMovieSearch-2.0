@@ -19,5 +19,5 @@ interface MovieService {
     suspend fun getMovieDetails(
         @Query("apikey") apikey: String,
         @Query("i") i: String
-    ): Call<MovieDetailsNetworkEntity>
+    ): Response<MovieDetailsNetworkEntity>
 }

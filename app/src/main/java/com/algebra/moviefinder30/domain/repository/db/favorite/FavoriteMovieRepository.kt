@@ -1,10 +1,11 @@
 package com.algebra.moviefinder30.domain.repository.db.favorite
 
 import com.algebra.moviefinder30.domain.model.local.FavoriteMovie
+import com.algebra.moviefinder30.domain.model.remote.Movie
 
 class FavoriteMovieRepository(private val dataSource: FavoriteMovieLocalDataSource) {
 
-    suspend fun insertFavoriteMovie(favoriteMovie: FavoriteMovie) = dataSource.insertFavoriteMovie(favoriteMovie)
+    suspend fun insertFavoriteMovie(favoriteMovie: Movie) = dataSource.insertFavoriteMovie(favoriteMovie)
 
     suspend fun getAllFavoritesMovies() = dataSource.getAllFavoritesMovies()
 

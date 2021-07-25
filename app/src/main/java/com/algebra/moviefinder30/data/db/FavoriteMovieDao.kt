@@ -14,8 +14,8 @@ interface FavoriteMovieDao {
     @Query("SELECT * FROM FavoriteMovies")
     suspend fun getAllFavoritesMovies(): LiveData<List<FavoriteMovie>>
 
-    @Query("DELETE FROM FavoriteMovies WHERE :id LIKE imdbId")
-    suspend fun removeFavoriteMovie(id: String)
+    @Query("DELETE FROM FavoriteMovies WHERE :id = id")
+    suspend fun removeFavoriteMovie(id: Int)
 
     @Query("DELETE FROM FavoriteMovies")
     suspend fun removeAllFavoritesMovie()

@@ -19,6 +19,9 @@ class MovieNetworkMapper: EntityMapper<SearchNetworkEntity, Movie> {
     fun toEntityListMovie(initial: List<SearchNetworkEntity>) =
         initial.map { mapFromEntity(it) }
 
+    fun toEntityListMovieByYear(initial: List<SearchNetworkEntity>) =
+        initial.map { mapFromEntity(it) }.sortedBy { it.year }
+
     fun toEntityListSearchNetworkEntity(initial: List<Movie>)  =
         initial.map { mapToEntity(it) }
 
