@@ -2,10 +2,10 @@ package com.algebra.moviefinder30.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.algebra.moviefinder30.domain.model.local.FavoriteMovie
-import com.algebra.moviefinder30.domain.model.local.Search
+import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
+import com.algebra.moviefinder30.data.model.local.SearchEntity
 
-@Database(entities = [FavoriteMovie::class, Search::class], version = 1)
+@Database(entities = [FavoriteMovieEntity::class, SearchEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun favoriteDao(): FavoriteMovieDao

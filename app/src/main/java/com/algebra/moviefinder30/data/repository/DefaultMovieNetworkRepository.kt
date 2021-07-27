@@ -10,27 +10,27 @@ import com.algebra.moviefinder30.domain.network.mapper.MovieNetworkMapper
 import com.algebra.moviefinder30.domain.repository.network.MovieNetworkDataSource
 import javax.inject.Inject
 
-class DefaultMovieNetworkRepository @Inject constructor(private val api: MovieService): MovieNetworkDataSource {
+class DefaultMovieNetworkRepository @Inject constructor(private val apiService: MovieService): MovieNetworkDataSource {
 
     private val networkMapper = MovieNetworkMapper()
     private val networkDetailsMapper = MovieDetailsNetworkMapper()
 
     override suspend fun getMoviesByTitle(searchValue: String): List<Movie>? {
-       val response = api.getSearchMovies(Resources.getSystem().getString(R.string.BASE_URL), searchValue)
+       val response = apiService.getSearchMovies(Resources.getSystem().getString(R.string.BASE_URL), searchValue)
         return if(response.isSuccessful)  response.body()?.SearchNetworkEntity?.let {
             networkMapper.toEntityListMovie(it)
         } else null
     }
 
     override suspend fun getMoviesByYear(searchValue: String): List<Movie>? {
-        val response = api.getSearchMovies(Resources.getSystem().getString(R.string.BASE_URL), searchValue)
+        val response = apiService.getSearchMovies(Resources.getSystem().getString(R.string.BASE_URL), searchValue)
         return if(response.isSuccessful) response.body()?.SearchNetworkEntity?.let {
             networkMapper.toEntityListMovieByYear(it)
         } else null
     }
 
     override suspend fun getMoviesDetailsById(imdbId: String): MovieDetails? {
-        val response = api.getMovieDetails(Resources.getSystem().getString(R.string.BASE_URL), imdbId)
+        val response = apiService.getMovieDetails(Resources.getSystem().getString(R.string.BASE_URL), imdbId)
         return if(response.isSuccessful) response.body()?.let {
             networkDetailsMapper.mapFromEntity(it)
         } else null

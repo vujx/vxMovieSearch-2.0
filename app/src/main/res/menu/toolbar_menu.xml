@@ -9,4 +9,9 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
+    <item
+        android:id="@+id/deleteAllFavoriteMovies"
+        android:title="@string/delete_all"
+        android:icon="@drawable/ic_baseline_delete_24"
+        app:showAsAction="always"/>
 </menu>

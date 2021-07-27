@@ -11,7 +11,7 @@
         style="@style/toolbar"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Movies" />
+        app:title="@string/movies" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -45,6 +45,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

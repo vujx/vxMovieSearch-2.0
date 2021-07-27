@@ -11,7 +11,7 @@
         style="@style/toolbar"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="MovieDetails">
+        app:title="@string/movieDetails">
 
         <ImageView
             android:id="@+id/ivFavMovie"

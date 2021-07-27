@@ -5,9 +5,9 @@ import com.algebra.moviefinder30.domain.repository.db.favorite.FavoriteMovieRepo
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 import java.lang.Exception
 
-class RemoveAllFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository): BaseUseCase<Int, String> {
+class RemoveAllFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository): BaseUseCase<Int?, String> {
 
-    override suspend fun execute(params: Int, callback: BaseUseCase.Callback<String>) {
+    override suspend fun execute(params: Int?, callback: BaseUseCase.Callback<String>) {
         try{
             favoriteRepo.removeAllFavoritesMovie()
             callback.onSuccess("Successfully clear favorite movies!")

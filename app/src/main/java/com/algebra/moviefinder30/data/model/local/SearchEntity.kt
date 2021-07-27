@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.algebra.moviefinder30.domain.UnitMovieEntry
 
-@Entity(tableName = "FavoriteMovies")
-data class FavoriteMovieEntity(
+@Entity(tableName = "SearchHistory")
+data class SearchEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
 
@@ -20,5 +20,8 @@ data class FavoriteMovieEntity(
     override val pictureURL: String,
 
     @ColumnInfo(name = "imdbId")
-    override val imdbId: String
+    override val imdbId: String,
+
+    @ColumnInfo(name = "searchValue")
+    val searchValue: String
 ) : UnitMovieEntry

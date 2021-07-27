@@ -1,25 +1,104 @@
 package com.algebra.moviefinder30.presentation.ui.favorites
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.databinding.FragmentFavoriteBinding
+import com.algebra.moviefinder30.presentation.ui.dialog.CustomDialog
+import com.algebra.moviefinder30.presentation.viewmodel.FavoriteMoviesViewModel
+import com.algebra.moviefinder30.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding: FragmentFavoriteBinding get() = _binding!!
+    private val viewModelFavorite: FavoriteMoviesViewModel by viewModels()
+    private val adapter = FavoriteAdapter()
+    private lateinit var searchView: SearchView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        setUpRecyclerView()
+        clickListener()
+        onBind()
+        viewModelFavorite.getAllFavoriteMovies()
         return binding.root
     }
 
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val searchItem = menu.findItem(R.id.searchIcon)
+        searchView = searchItem?.actionView as SearchView
+        searchView.queryHint = "Enter movie"
+
+        searchAction(searchView, view)
+        return super.onCreateOptionsMenu(menu, menuInflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.deleteAllFavoriteMovies) showRemoveDialog(requireActivity(), viewModelFavorite)
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun onBind(){
+        viewModelFavorite.favorites.observe(viewLifecycleOwner, {result ->
+            when (result) {
+                is ResultOf.Success -> {
+                    hideProgressBar(binding.progressBar)
+                    if(result.value.isEmpty()){
+                        binding.tvTitleFavorite.text = context?.getString(R.string.favorite)
+                        binding.tvDisplayMess.text = context?.getString(R.string.message_no_favorite_movies)
+                    } else adapter.setList(result.value)
+                }
+                is ResultOf.Failure -> {
+                    hideProgressBar(binding.progressBar)
+                    result.message?.let { displayMessage(it, requireContext())}
+                }
+                is ResultOf.Loading -> displayProgressBar(binding.progressBar)
+            }
+        })
+
+        viewModelFavorite.notification.observe(viewLifecycleOwner, {result ->
+            hideProgressBar(binding.progressBar)
+            if(result != null && !result.hasBeenHandled()) displayMessage(result.contentIfNotHandled.toString(), requireContext())
+        })
+    }
+
+    private fun setUpRecyclerView(){
+        binding.rvFavorite.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvFavorite.adapter = adapter
+    }
+
+    private fun clickListener(){
+        adapter.listener = object: FavoriteAdapter.Listener{
+            override fun onFavClick(imdbId: String) {
+                viewModelFavorite.removeFavoriteMovie(imdbId)
+            }
+
+            override fun onItemClick(imdbId: String, title: String) {
+                view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_detailsFragment3) }
+            }
+        }
     }
 
     companion object {

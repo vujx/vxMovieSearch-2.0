@@ -12,3 +12,8 @@ fun checkYear(value: String): String =
     } catch (e: Exception){
         "0"
     }
+
+fun checkPictureURL(value: String): String =
+    if(value == "N/A")
+        "https://lh3.googleusercontent.com/proxy/GWY6mCuXRX6im-UOTlletKHpXQ3wv9DSlgZFpSz8aetXxAv6XPjQ4oj97ADYXxd0s44eIq9ywXHIwGabLBM0Bfng48E"
+    else value

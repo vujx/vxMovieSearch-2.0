@@ -1,6 +1,5 @@
 package com.algebra.moviefinder30.domain.repository.db.favorite
 
-import com.algebra.moviefinder30.domain.model.local.FavoriteMovie
 import com.algebra.moviefinder30.domain.model.remote.Movie
 
 class FavoriteMovieRepository(private val dataSource: FavoriteMovieLocalDataSource) {
@@ -9,7 +8,7 @@ class FavoriteMovieRepository(private val dataSource: FavoriteMovieLocalDataSour
 
     suspend fun getAllFavoritesMovies() = dataSource.getAllFavoritesMovies()
 
-    suspend fun removeFavoriteMovie(id: Int) = dataSource.removeFavoriteMovie(id)
+    suspend fun removeFavoriteMovie(imdb: String) = dataSource.removeFavoriteMovie(imdb)
 
     suspend fun removeAllFavoritesMovie() = dataSource.removeAllFavoritesMovie()
 
