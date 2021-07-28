@@ -5,21 +5,27 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.navigation.Navigation
 import com.algebra.moviefinder30.R
+import com.algebra.moviefinder30.presentation.ui.MainActivity
+import com.algebra.moviefinder30.presentation.viewmodel.SearchMoviesViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("RestrictedApi", "CheckResult")
-fun searchAction(searchView: SearchView, view: View?){
+fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesViewModel?){
     var checkIfSubmit = false
     Observable.create<String> { emiter ->
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     if(it.isNotEmpty()){
+                        MainActivity.searchValue = it.toLowerCase()
                         checkIfSubmit = true
-                        view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                        if (viewModel == null)
+                            view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                        else
+                            viewModel.fetchMovies(it.toLowerCase())
                     }
                 }
                 return false
@@ -38,7 +44,12 @@ fun searchAction(searchView: SearchView, view: View?){
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
             when {
-                it.length >= 3 && !checkIfSubmit -> view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                it.length >= 3 && !checkIfSubmit -> {
+                    MainActivity.searchValue = it.toLowerCase()
+                    if(viewModel == null)
+                    view?.let {view -> Navigation.findNavController(view).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                    else viewModel.fetchMovies(it.toLowerCase())
+                }
             }
         }
 }

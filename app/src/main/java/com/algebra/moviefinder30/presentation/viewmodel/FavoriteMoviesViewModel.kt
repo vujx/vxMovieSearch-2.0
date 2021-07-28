@@ -1,7 +1,9 @@
 package com.algebra.moviefinder30.presentation.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
 import com.algebra.moviefinder30.data.usecase.UseCaseDbFavorite
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
@@ -25,15 +27,12 @@ class FavoriteMoviesViewModel @Inject constructor(private val useCases: UseCaseD
 
     fun getAllFavoriteMovies() = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
         _favorites.postValue(ResultOf.Loading())
-        Log.d("ispis", "sasa")
         useCases.getAllFavoriteMovies.execute(null, object: BaseUseCase.Callback<List<FavoriteMovieEntity>>{
             override fun onSuccess(result: List<FavoriteMovieEntity>) {
-                Log.d("ispis", "sasa1")
                 _favorites.postValue(ResultOf.Success(result.sortedBy { it.title.toLowerCase(Locale.ROOT) }))
             }
 
             override fun onError(throwable: Throwable) {
-                Log.d("ispis", "sasa2")
                 _favorites.postValue(ResultOf.Failure(throwable.message, throwable))
             }
         })

@@ -32,7 +32,7 @@ object ApiServiceModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Resources.getSystem().getString(R.string.BASE_URL))
+            .baseUrl("https://www.omdbapi.com/")
             .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()

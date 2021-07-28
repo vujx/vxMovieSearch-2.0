@@ -2,6 +2,6 @@ package com.algebra.moviefinder30.data.model.remote.movie
 
 data class MovieNetworkEntity(
     val Response: String,
-    val SearchNetworkEntity: List<SearchNetworkEntity>,
+    val Search: List<SearchNetworkEntity>,
     val totalResults: String
 )

@@ -3,19 +3,21 @@ package com.algebra.moviefinder30.domain.db
 import com.algebra.moviefinder30.data.model.local.SearchEntity
 import com.algebra.moviefinder30.data.model.remote.movie.SearchNetworkEntity
 import com.algebra.moviefinder30.domain.EntityMapper
+import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.util.checkPictureURL
 import com.algebra.moviefinder30.domain.util.checkValue
 import com.algebra.moviefinder30.domain.util.checkYear
+import com.algebra.moviefinder30.presentation.ui.MainActivity
 
-class SearchMovieMapper: EntityMapper<SearchNetworkEntity, SearchEntity> {
+class SearchMovieMapper: EntityMapper<Movie, SearchEntity> {
 
-    var searchValue = ""
-
-    override fun mapFromEntity(entity: SearchNetworkEntity): SearchEntity {
-        return SearchEntity(0, checkValue(entity.Title), checkYear(entity.Year), checkPictureURL(entity.Poster), checkValue(entity.imdbID), searchValue)
+    override fun mapFromEntity(entity: Movie): SearchEntity {
+        return SearchEntity(0, checkValue(entity.title), checkYear(entity.year), checkPictureURL(entity.pictureURL), checkValue(entity.imdbId), MainActivity.searchValue.toLowerCase())
     }
 
-    fun toEntityListSearchMovie(initial: List<SearchNetworkEntity>): List<SearchEntity>
-            = initial.map { mapFromEntity(it) }
+    private fun mapFromSearchEntityToMovie(entity: SearchEntity) = Movie(entity.title, entity.year, entity.pictureURL, entity.imdbId)
+
+    fun toEntityListMovie(initial: List<SearchEntity>): List<Movie>
+        =initial.map { mapFromSearchEntityToMovie(it) }
 
 }

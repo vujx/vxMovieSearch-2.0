@@ -1,6 +1,7 @@
 package com.algebra.moviefinder30.util
 
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -20,6 +21,7 @@ fun displayPic(view: View, pictureURL: String, imageView: ImageView){
         .load(pictureURL)
         .skipMemoryCache(false)
         .placeholder(R.drawable.no_image_available)
+        .error(R.drawable.error)
         .into(imageView)
 }
 
@@ -38,7 +40,7 @@ fun hideProgressBar(progressBar: ProgressBar){
 }
 
 fun showRemoveDialog(requireActivity: FragmentActivity, viewModel: FavoriteMoviesViewModel){
-    val dialog = CustomDialog("Are you sure you want to remove all favorite movies?")
+    val dialog = CustomDialog(requireActivity.getString(R.string.remove_fav))
     dialog.show(requireActivity.supportFragmentManager, "RemoveFavoriteMovies")
     dialog.listener = object : CustomDialog.Listener {
         override fun okPress(isPress: Boolean) {
@@ -50,7 +52,7 @@ fun showRemoveDialog(requireActivity: FragmentActivity, viewModel: FavoriteMovie
 fun exitFromApp(activity: AppCompatActivity){
     activity.supportFragmentManager.findFragmentById(R.id.favoriteFragment)?.let {
         if (it is FavoriteFragment) {
-            val dialog = CustomDialog("Are you sure you want to exit?")
+            val dialog = CustomDialog(activity.getString(R.string.exit_app))
             dialog.show(activity.supportFragmentManager, "Logout")
             dialog.listener = object : CustomDialog.Listener {
                 override fun okPress(isPress: Boolean) {

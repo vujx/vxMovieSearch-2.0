@@ -11,11 +11,9 @@ class GetAllFavoriteMovies(private val favoriteRepo: FavoriteMovieRepository): B
 
     override suspend fun execute(params: Int?, callback: BaseUseCase.Callback<List<FavoriteMovieEntity>>) {
         try {
-            Log.d("ispis3", "saas")
             val result = favoriteRepo.getAllFavoritesMovies()
             callback.onSuccess(result.value ?: emptyList())
         } catch (e: Exception){
-            Log.d("ispis4", "sasda")
             callback.onError(e)
         }
     }

@@ -7,13 +7,13 @@ fun checkValue(value: String): String =
 fun checkYear(value: String): String =
      try{
         value.toInt()
-        if(value.toInt() < 1888) "0"
+        if(value.toInt() < 1888) "No year available"
         else value
     } catch (e: Exception){
-        "0"
+        "No year available"
     }
 
 fun checkPictureURL(value: String): String =
     if(value == "N/A")
-        "https://lh3.googleusercontent.com/proxy/GWY6mCuXRX6im-UOTlletKHpXQ3wv9DSlgZFpSz8aetXxAv6XPjQ4oj97ADYXxd0s44eIq9ywXHIwGabLBM0Bfng48E"
+        "https://images.app.goo.gl/xNoNTyvhgvYWVu1e9"
     else value

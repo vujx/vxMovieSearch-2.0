@@ -10,7 +10,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.databinding.FragmentFavoriteBinding
-import com.algebra.moviefinder30.presentation.ui.dialog.CustomDialog
 import com.algebra.moviefinder30.presentation.viewmodel.FavoriteMoviesViewModel
 import com.algebra.moviefinder30.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +50,7 @@ class FavoriteFragment : Fragment() {
         searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Enter movie"
 
-        searchAction(searchView, view)
+        searchAction(searchView, view, null)
         return super.onCreateOptionsMenu(menu, menuInflater)
     }
 
@@ -68,7 +67,11 @@ class FavoriteFragment : Fragment() {
                     if(result.value.isEmpty()){
                         binding.tvTitleFavorite.text = context?.getString(R.string.favorite)
                         binding.tvDisplayMess.text = context?.getString(R.string.message_no_favorite_movies)
-                    } else adapter.setList(result.value)
+                    } else {
+                        adapter.setList(result.value)
+                        binding.tvTitleFavorite.text = ""
+                        binding.tvDisplayMess.text = ""
+                    }
                 }
                 is ResultOf.Failure -> {
                     hideProgressBar(binding.progressBar)
@@ -99,10 +102,5 @@ class FavoriteFragment : Fragment() {
                 view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_detailsFragment3) }
             }
         }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = FavoriteFragment()
     }
 }

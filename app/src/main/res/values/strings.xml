@@ -8,5 +8,7 @@
     <string name="message_no_favorite_movies">You do not have any favorite movies in your list. Search for movies to add them.</string>
     <string name="enter_movie">Enter movie</string>
     <string name="delete_all">Delete All</string>
-
+    <string name="message_no_search_result">Movie not found, try again!</string>
+    <string name="exit_app">Are you sure you want to exit?</string>
+    <string name="remove_fav">Are you sure you want to remove all favorite movies?</string>
 </resources>

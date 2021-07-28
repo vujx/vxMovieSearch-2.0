@@ -17,4 +17,8 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         exitFromApp(this)
     }
+
+    companion object{
+        var searchValue = ""
+    }
 }
