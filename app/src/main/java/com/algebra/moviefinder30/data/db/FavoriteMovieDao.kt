@@ -14,7 +14,7 @@ interface FavoriteMovieDao {
     suspend fun insertFavoriteMovie(movie: FavoriteMovieEntity)
 
     @Query("SELECT * FROM FavoriteMovies")
-    fun getAllFavoritesMovies(): LiveData<List<FavoriteMovieEntity>>
+    suspend fun getAllFavoritesMovies(): List<FavoriteMovieEntity>
 
     @Query("DELETE FROM FavoriteMovies WHERE :imdb LIKE imdbId")
     suspend fun removeFavoriteMovie(imdb: String)

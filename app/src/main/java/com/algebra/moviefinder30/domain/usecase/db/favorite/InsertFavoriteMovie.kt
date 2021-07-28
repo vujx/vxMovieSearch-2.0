@@ -9,7 +9,7 @@ class InsertFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository): Ba
     override suspend fun execute(params: Movie, callback: BaseUseCase.Callback<String>) {
         try{
             favoriteRepo.insertFavoriteMovie(params)
-            callback.onSuccess("Movie successfully added!")
+            callback.onSuccess("Favorite movie successfully added!")
         } catch (e: Exception){
             callback.onError(e)
         }

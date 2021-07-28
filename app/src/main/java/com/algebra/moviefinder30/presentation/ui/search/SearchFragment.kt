@@ -1,6 +1,7 @@
 package com.algebra.moviefinder30.presentation.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,11 @@ class SearchFragment : Fragment() {
     private val viewModelSearch: SearchMoviesViewModel by viewModels()
     private val adapter = SearchAdapter()
     private lateinit var searchView: SearchView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -61,12 +67,15 @@ class SearchFragment : Fragment() {
     private fun clickListener(){
         adapter.listener = object: SearchAdapter.Listener{
             override fun onFavClick(movie: Movie, isFav: Boolean) {
-                if(isFav) viewModelSearch.removeMovieFromFavorite(movie.imdbId)
-                else viewModelSearch.addMovieToFavorite(movie)
+                if(isFav) viewModelSearch.removeMovieFromFavorite(movie.imdbId).also {
+                    Log.d("isvvv", "isv")
+                    viewModelFavorite.getAllFavoriteMovies() }
+                else viewModelSearch.addMovieToFavorite(movie).also { viewModelFavorite.getAllFavoriteMovies() }
             }
 
-            override fun onItemClick(imdbId: String, title: String) {
-                view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_detailsFragment3) }
+            override fun onItemClick(imdbId: String) {
+                val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment2(imdbId)
+                view?.let { Navigation.findNavController(it).navigate(action) }
             }
         }
     }
@@ -74,13 +83,17 @@ class SearchFragment : Fragment() {
     private fun onBind(){
         viewModelFavorite.favorites.observe(viewLifecycleOwner, { result->
             when (result) {
-                is ResultOf.Success -> adapter.setFavoriteList(result.value)
-                is ResultOf.Failure -> result.message?.let { displayMessage(it, requireContext()) }
+                is ResultOf.Success -> {
+                    adapter.setFavoriteList(result.value)
+                    Log.d("iss", "sad")
+                }
+                    is ResultOf.Failure -> result.message?.let { displayMessage(it, requireContext()) }
             }})
 
         viewModelSearch.movies.observe(viewLifecycleOwner, {result ->
             when(result){
                 is ResultOf.Success -> {
+                    Log.d("ispis", "ss")
                     hideProgressBar(binding.progressBar)
                     if(result.value.isEmpty())
                         binding.tvSearchMess.text =  context?.getString(R.string.message_no_search_result)
@@ -90,6 +103,7 @@ class SearchFragment : Fragment() {
                     }
                 }
                 is ResultOf.Failure -> {
+                    Log.d("ispis2", "ss")
                     hideProgressBar(binding.progressBar)
                     result.message?.let { displayMessage(it, requireContext())}
                 }

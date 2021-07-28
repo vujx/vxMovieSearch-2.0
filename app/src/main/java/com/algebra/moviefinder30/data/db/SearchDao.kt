@@ -10,7 +10,7 @@ import com.algebra.moviefinder30.data.model.local.SearchEntity
 interface SearchDao {
 
     @Query("SELECT * FROM SearchHistory WHERE :searchValue LIKE searchValue ORDER BY year")
-    fun getSearchMoviesByYear(searchValue: String): List<SearchEntity>
+    suspend fun getSearchMoviesByYear(searchValue: String): List<SearchEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchMovie(searchMovie: SearchEntity)

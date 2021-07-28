@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_detailsFragment_to_favoriteFragment2"
             app:destination="@id/favoriteFragment" />
+        <argument
+            android:name="imdb"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

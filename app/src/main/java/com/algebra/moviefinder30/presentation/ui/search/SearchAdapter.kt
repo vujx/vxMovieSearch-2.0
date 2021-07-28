@@ -1,5 +1,6 @@
 package com.algebra.moviefinder30.presentation.ui.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,16 +27,20 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.MovieViewHolder>() {
     fun setFavoriteList(list: List<FavoriteMovieEntity>){
         listOfFavMovies.clear()
         listOfFavMovies.addAll(list)
+        Log.d("fav", list.toString())
+        Log.d("fav.size", list.size.toString())
         notifyDataSetChanged()
     }
 
     inner class MovieViewHolder(private val itemMovie: SearchMovieItemBinding): RecyclerView.ViewHolder(itemMovie.root){
         init {
             itemView.setOnClickListener {
-                listener?.onItemClick(listOfMovies[layoutPosition].imdbId, listOfMovies[layoutPosition].title)
+                listener?.onItemClick(listOfMovies[layoutPosition].imdbId)
             }
             itemMovie.ivFavorite.setOnClickListener {
-                listener?.onFavClick(listOfMovies[layoutPosition], false)
+                if(FavoriteMovieMapper().mapFromEntity(listOfMovies[layoutPosition]) in listOfFavMovies)
+                    listener?.onFavClick(listOfMovies[layoutPosition], true)
+                else listener?.onFavClick(listOfMovies[layoutPosition], false)
             }
         }
 
@@ -53,6 +58,8 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.MovieViewHolder>() {
         }
     }
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = SearchMovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(binding)
@@ -66,6 +73,6 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.MovieViewHolder>() {
 
     interface Listener{
         fun onFavClick(movie: Movie, isFav: Boolean)
-        fun onItemClick(imdbId: String, title: String)
+        fun onItemClick(imdbId: String)
     }
 }

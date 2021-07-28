@@ -26,8 +26,11 @@ class DefaultMovieNetworkRepository @Inject constructor(private val apiService: 
 
     override suspend fun getMoviesByYear(searchValue: String): List<Movie>? {
         val response = apiService.getSearchMovies(BuildConfig.APIKey, searchValue)
+        Log.d("ispiso", response.body().toString())
         return if(response.isSuccessful) response.body()?.let {
-            networkMapper.toEntityListMovieByYear(it.Search)
+            if(it.Response == "False"){
+                emptyList()
+            } else networkMapper.toEntityListMovieByYear(it.Search)
         } else null
     }
 

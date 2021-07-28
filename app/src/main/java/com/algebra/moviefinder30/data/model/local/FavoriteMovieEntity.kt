@@ -7,8 +7,8 @@ import com.algebra.moviefinder30.domain.UnitMovieEntry
 
 @Entity(tableName = "FavoriteMovies")
 data class FavoriteMovieEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    @PrimaryKey(autoGenerate = false)
+    var id: String,
 
     @ColumnInfo(name = "title")
     override val title: String,

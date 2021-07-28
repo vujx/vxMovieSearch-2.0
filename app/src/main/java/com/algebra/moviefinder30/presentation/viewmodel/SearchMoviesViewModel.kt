@@ -10,6 +10,10 @@ import com.algebra.moviefinder30.data.usecase.UseCaseDbSearch
 import com.algebra.moviefinder30.data.usecase.UseCaseNetwork
 import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
+import com.algebra.moviefinder30.presentation.util.addFavMovie
+import com.algebra.moviefinder30.presentation.util.addMovieToDb
+import com.algebra.moviefinder30.presentation.util.fetchMoviesFromNetwork
+import com.algebra.moviefinder30.presentation.util.removeFavMovie
 import com.algebra.moviefinder30.util.Event
 import com.algebra.moviefinder30.util.ResultOf
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,56 +43,28 @@ class SearchMoviesViewModel @Inject constructor(private val useCasesSearch: UseC
 
     fun addMovieToFavorite(movie: Movie){
         viewModelScope.launch(Dispatchers.IO + exceptionHandler){
-            useCasesFavorite.insertFavoriteMovie.execute(movie, object: BaseUseCase.Callback<String>{
-                override fun onSuccess(result: String) {
-                    _notification.postValue(Event(result))
-                }
-
-                override fun onError(throwable: Throwable) {
-                    _notification.postValue(Event(throwable.message))
-                }
-            })
+            addFavMovie(useCasesFavorite, movie, _notification)
+            Log.d("iss", "sad123")
         }
     }
 
-    fun removeMovieFromFavorite(imdb: String){
+    fun removeMovieFromFavorite(imdb: String) =
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            useCasesFavorite.removeFavoriteMovie.execute(imdb, object: BaseUseCase.Callback<String>{
-                override fun onSuccess(result: String) {
-                    _notification.postValue(Event(result))
-                }
-
-                override fun onError(throwable: Throwable) {
-                    _notification.postValue(Event(throwable.message))
-                }
-            })
+            removeFavMovie(useCasesFavorite, imdb, _notification)
         }
-    }
+
 
     fun fetchMovies(searchValue: String){
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             _movies.postValue(ResultOf.Loading())
+            Log.d("sssa", "sss")
             useCasesSearch.getSearchMovieByYear.execute(searchValue, object: BaseUseCase.Callback<List<Movie>>{
-                override fun onSuccess(result: List<Movie>) {
-                    Log.d("dada", "sss")
-                    if(result.isEmpty()){
-                        Log.d("sss", "s")
-                        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-                            useCaseNetwork.getMovieByYear.execute(searchValue, object: BaseUseCase.Callback<List<Movie>?>{
-                                override fun onSuccess(result: List<Movie>?) {
-                                    if(result != null) {
-                                        _movies.postValue(ResultOf.Success(result))
-                                        result.forEach {
-                                            addMovieToSearchDb(it)
-                                        }
-                                    }
-                                    else _movies.postValue(ResultOf.Failure("Something went wrong, try again!", null))
-                                }
 
-                                override fun onError(throwable: Throwable) {
-                                    _movies.postValue(ResultOf.Failure(throwable.message, throwable))
-                                }
-                            })
+                override fun onSuccess(result: List<Movie>) {
+                    Log.d("sssa", result.toString())
+                    if(result.isEmpty()){
+                        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+                            fetchMoviesFromNetwork(useCaseNetwork, searchValue, this@SearchMoviesViewModel, _movies)
                         }
                     } else _movies.postValue(ResultOf.Success(result))
                 }
@@ -102,15 +78,7 @@ class SearchMoviesViewModel @Inject constructor(private val useCasesSearch: UseC
 
     fun addMovieToSearchDb(movie: Movie){
         viewModelScope.launch {
-            useCasesSearch.insertSearchMovie.execute(movie, object: BaseUseCase.Callback<String>{
-                override fun onSuccess(result: String) {
-                    _notification.postValue(Event(result))
-                }
-
-                override fun onError(throwable: Throwable) {
-                    _notification.postValue(Event(throwable.message))
-                }
-            })
+            addMovieToDb(useCasesSearch, movie, _notification)
         }
     }
 }

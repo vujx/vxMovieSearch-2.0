@@ -10,6 +10,7 @@ import com.algebra.moviefinder30.presentation.viewmodel.SearchMoviesViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("RestrictedApi", "CheckResult")
@@ -45,10 +46,10 @@ fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesVie
         .subscribe {
             when {
                 it.length >= 3 && !checkIfSubmit -> {
-                    MainActivity.searchValue = it.toLowerCase()
+                    MainActivity.searchValue = it.toLowerCase(Locale.ROOT)
                     if(viewModel == null)
                     view?.let {view -> Navigation.findNavController(view).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
-                    else viewModel.fetchMovies(it.toLowerCase())
+                    else viewModel.fetchMovies(it.toLowerCase(Locale.ROOT))
                 }
             }
         }

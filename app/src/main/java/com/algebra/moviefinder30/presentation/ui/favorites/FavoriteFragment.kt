@@ -68,10 +68,10 @@ class FavoriteFragment : Fragment() {
                         binding.tvTitleFavorite.text = context?.getString(R.string.favorite)
                         binding.tvDisplayMess.text = context?.getString(R.string.message_no_favorite_movies)
                     } else {
-                        adapter.setList(result.value)
                         binding.tvTitleFavorite.text = ""
                         binding.tvDisplayMess.text = ""
                     }
+                    adapter.setList(result.value)
                 }
                 is ResultOf.Failure -> {
                     hideProgressBar(binding.progressBar)
@@ -99,7 +99,8 @@ class FavoriteFragment : Fragment() {
             }
 
             override fun onItemClick(imdbId: String, title: String) {
-                view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_detailsFragment3) }
+                val action = FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment3(imdbId)
+                view?.let { Navigation.findNavController(it).navigate(action) }
             }
         }
     }
