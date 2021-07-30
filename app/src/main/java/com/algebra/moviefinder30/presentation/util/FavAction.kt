@@ -49,7 +49,7 @@ suspend fun getAllFavMovie(useCasesFavorite: UseCaseDbFavorite, _favorites: Muta
     _favorites.postValue(ResultOf.Loading())
     useCasesFavorite.getAllFavoriteMovies.execute(null, object: BaseUseCase.Callback<List<FavoriteMovieEntity>>{
         override fun onSuccess(result: List<FavoriteMovieEntity>) {
-            _favorites.postValue(ResultOf.Success(result.sortedBy { it.title.toLowerCase(Locale.ROOT) }))
+            _favorites.postValue(ResultOf.Success(result.sortedWith(compareBy ({ it.title }, {it.year}))))
         }
 
         override fun onError(throwable: Throwable) {

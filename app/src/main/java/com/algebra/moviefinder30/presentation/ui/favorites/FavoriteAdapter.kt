@@ -2,14 +2,10 @@ package com.algebra.moviefinder30.presentation.ui.favorites
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
 import com.algebra.moviefinder30.databinding.FavoriteMovieItemBinding
 import com.algebra.moviefinder30.util.displayPic
-import com.bumptech.glide.Glide
-import java.util.*
 
 class FavoriteAdapter(): RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>(){
 

@@ -48,7 +48,7 @@ class FavoriteFragment : Fragment() {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         val searchItem = menu.findItem(R.id.searchIcon)
         searchView = searchItem?.actionView as SearchView
-        searchView.queryHint = "Enter movie"
+        searchView.queryHint = context?.getString(R.string.enter_movie)
 
         searchAction(searchView, view, null)
         return super.onCreateOptionsMenu(menu, menuInflater)
@@ -75,7 +75,7 @@ class FavoriteFragment : Fragment() {
                 }
                 is ResultOf.Failure -> {
                     hideProgressBar(binding.progressBar)
-                    result.message?.let { displayMessage(it, requireContext())}
+                    result.throwable?.let { displayErrorMessage(it, requireContext()) }
                 }
                 is ResultOf.Loading -> displayProgressBar(binding.progressBar)
             }

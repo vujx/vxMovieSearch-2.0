@@ -1,11 +1,11 @@
 package com.algebra.moviefinder30.presentation.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +13,6 @@ import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.databinding.FragmentSearchBinding
 import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.presentation.ui.MainActivity
-import com.algebra.moviefinder30.presentation.viewmodel.FavoriteMoviesViewModel
 import com.algebra.moviefinder30.presentation.viewmodel.SearchMoviesViewModel
 import com.algebra.moviefinder30.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +22,6 @@ class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding: FragmentSearchBinding get() = _binding!!
-    private val viewModelFavorite: FavoriteMoviesViewModel by viewModels()
     private val viewModelSearch: SearchMoviesViewModel by viewModels()
     private val adapter = SearchAdapter()
     private lateinit var searchView: SearchView
@@ -35,12 +33,12 @@ class SearchFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        setUpToolbar()
         setUpRecyclerView()
         clickListener()
         onBind()
-        viewModelFavorite.getAllFavoriteMovies()
         viewModelSearch.fetchMovies(MainActivity.searchValue)
+        viewModelSearch.getAllFavoriteMovies()
         return binding.root
     }
 
@@ -50,13 +48,21 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.toolbar_menu_search, menu)
         val searchItem = menu.findItem(R.id.searchIcon)
         searchView = searchItem?.actionView as SearchView
-        searchView.queryHint = "Enter movie"
+        searchView.queryHint = context?.getString(R.string.enter_movie)
 
         searchAction(searchView, view, viewModelSearch)
         return super.onCreateOptionsMenu(menu, menuInflater)
+    }
+
+    private fun setUpToolbar(){
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        binding.toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_arrow_back_24)
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
     private fun setUpRecyclerView(){
@@ -67,33 +73,34 @@ class SearchFragment : Fragment() {
     private fun clickListener(){
         adapter.listener = object: SearchAdapter.Listener{
             override fun onFavClick(movie: Movie, isFav: Boolean) {
-                if(isFav) viewModelSearch.removeMovieFromFavorite(movie.imdbId).also {
-                    Log.d("isvvv", "isv")
-                    viewModelFavorite.getAllFavoriteMovies() }
-                else viewModelSearch.addMovieToFavorite(movie).also { viewModelFavorite.getAllFavoriteMovies() }
+                if(isFav) viewModelSearch.removeMovieFromFavorite(movie.imdbId)
+                else viewModelSearch.addMovieToFavorite(movie)
             }
 
-            override fun onItemClick(imdbId: String) {
-                val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment2(imdbId)
+            override fun onItemClick(imdb: String, isFav: Boolean) {
+                val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment2(imdb, isFav)
                 view?.let { Navigation.findNavController(it).navigate(action) }
             }
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModelSearch.fetchMovies(MainActivity.searchValue)
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 
     private fun onBind(){
-        viewModelFavorite.favorites.observe(viewLifecycleOwner, { result->
+        viewModelSearch.favorites.observe(viewLifecycleOwner, { result->
             when (result) {
                 is ResultOf.Success -> {
                     adapter.setFavoriteList(result.value)
-                    Log.d("iss", "sad")
                 }
-                    is ResultOf.Failure -> result.message?.let { displayMessage(it, requireContext()) }
+                is ResultOf.Failure ->  result.throwable?.let { displayErrorMessage(it, requireContext())}
             }})
 
         viewModelSearch.movies.observe(viewLifecycleOwner, {result ->
             when(result){
                 is ResultOf.Success -> {
-                    Log.d("ispis", "ss")
                     hideProgressBar(binding.progressBar)
                     if(result.value.isEmpty())
                         binding.tvSearchMess.text =  context?.getString(R.string.message_no_search_result)
@@ -103,9 +110,8 @@ class SearchFragment : Fragment() {
                     }
                 }
                 is ResultOf.Failure -> {
-                    Log.d("ispis2", "ss")
                     hideProgressBar(binding.progressBar)
-                    result.message?.let { displayMessage(it, requireContext())}
+                    result.throwable?.let { displayErrorMessage(it, requireContext())}
                 }
                 is ResultOf.Loading -> displayProgressBar(binding.progressBar)
             }

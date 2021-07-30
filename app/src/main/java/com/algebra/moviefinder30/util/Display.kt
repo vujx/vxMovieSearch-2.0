@@ -1,7 +1,6 @@
 package com.algebra.moviefinder30.util
 
 import android.content.Context
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -20,8 +19,8 @@ fun displayPic(view: View, pictureURL: String, imageView: ImageView){
     Glide.with(view)
         .load(pictureURL)
         .skipMemoryCache(false)
-        .placeholder(R.drawable.no_image_available)
-        .error(R.drawable.error)
+        .placeholder(R.drawable.imagenotavaliable)
+        .error(R.drawable.imagenotavaliable)
         .into(imageView)
 }
 
@@ -60,5 +59,14 @@ fun exitFromApp(activity: AppCompatActivity){
                 }
             }
         }
+    }
+}
+
+fun displayErrorMessage(throwable: Throwable, context: Context){
+    when {
+        throwable.toString().contains("NoConnectivityException") || throwable.toString().contains("No address associated with hostname") ->
+            displayMessage(context.getString(R.string.check_internet), context)
+        throwable.toString().contains("HTTP 404 Not Found") -> displayMessage(context.getString(R.string.movie_not_found), context)
+        else -> displayMessage(context.getString(R.string.error_message), context)
     }
 }

@@ -1,7 +1,5 @@
 package com.algebra.moviefinder30.data.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.algebra.moviefinder30.data.db.FavoriteMovieDao
 import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
 import com.algebra.moviefinder30.domain.db.FavoriteMovieMapper
@@ -13,11 +11,7 @@ class DefaultFavoriteRepository @Inject constructor(private val favoriteMovieDao
 
     private val favoriteMapper = FavoriteMovieMapper()
 
-    override suspend fun insertFavoriteMovie(movie: Movie) {
-        favoriteMovieDao.insertFavoriteMovie(favoriteMapper.mapFromEntity(movie))
-        Log.d("ipsiiv", movie.toString())
-        Log.d("sss", favoriteMapper.mapFromEntity(movie).toString())
-    }
+    override suspend fun insertFavoriteMovie(movie: Movie) = favoriteMovieDao.insertFavoriteMovie(favoriteMapper.mapFromEntity(movie))
 
     override suspend fun getAllFavoritesMovies(): List<FavoriteMovieEntity> = favoriteMovieDao.getAllFavoritesMovies()
 

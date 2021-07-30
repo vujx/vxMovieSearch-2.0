@@ -1,7 +1,7 @@
 package com.algebra.moviefinder30.data.di
 
 import android.content.Context
-import android.content.res.Resources
+import com.algebra.moviefinder30.App
 import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.data.network.MovieService
 import com.algebra.moviefinder30.domain.network.connection.ConnectivityInterceptorImpl
@@ -17,7 +17,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-
 @InstallIn(SingletonComponent::class)
 @Module
 object ApiServiceModule {
@@ -32,7 +31,7 @@ object ApiServiceModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://www.omdbapi.com/")
+            .baseUrl(App.getResource().getString(R.string.BASE_URL))
             .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()
@@ -45,7 +44,7 @@ object ApiServiceModule {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         return OkHttpClient.Builder()
-            .addInterceptor(ChuckInterceptor(context))
+            //.addInterceptor(ChuckInterceptor(context))
             .addInterceptor(logging)
             .addInterceptor(ConnectivityInterceptorImpl(context))
             .build()

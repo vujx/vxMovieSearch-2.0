@@ -11,4 +11,13 @@
     <string name="message_no_search_result">Movie not found, try again!</string>
     <string name="exit_app">Are you sure you want to exit?</string>
     <string name="remove_fav">Are you sure you want to remove all favorite movies?</string>
+    <string name="added_fav_movie">Favorite movie successfully added!</string>
+    <string name="remove_all_from_fav">Successfully clear favorite movies!</string>
+    <string name="remove_fav_move_from_db">Favorite movie successfully removed!</string>
+    <string name="check_year_message">Year not available</string>
+    <string name="check_value_message">"Value not available!"</string>
+    <string name="error_message">Something went wrong, try again</string>
+    <string name="search_message">Enter movie</string>
+    <string name="movie_not_found">Movie not found, try again!</string>
+    <string name="check_internet">Check you internet connection!</string>
 </resources>

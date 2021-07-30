@@ -3,7 +3,6 @@ import com.algebra.moviefinder30.domain.usecase.db.favorite.*
 
 data class UseCaseDbFavorite(
     val getAllFavoriteMovies: GetAllFavoriteMovies,
-    val getFavoriteMovie: GetFavoriteMovie,
     val insertFavoriteMovie: InsertFavoriteMovie,
     val removeAllFavoriteMovie: RemoveAllFavoriteMovie,
     val removeFavoriteMovie: RemoveFavoriteMovie

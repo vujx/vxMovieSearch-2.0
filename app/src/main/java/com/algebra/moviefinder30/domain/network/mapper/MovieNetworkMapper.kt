@@ -13,17 +13,10 @@ class MovieNetworkMapper: EntityMapper<SearchNetworkEntity, Movie> {
         return Movie(checkValue(entity.Title), checkYear(entity.Year), checkPictureURL(entity.Poster), checkValue(entity.imdbID))
     }
 
-    private fun mapToEntity(domainModel: Movie): SearchNetworkEntity {
-        return SearchNetworkEntity(domainModel.pictureURL, domainModel.title,"", domainModel.year, domainModel.imdbId)
-    }
-
     fun toEntityListMovie(initial: List<SearchNetworkEntity>) =
         initial.map { mapFromEntity(it) }
 
     fun toEntityListMovieByYear(initial: List<SearchNetworkEntity>) =
         initial.map { mapFromEntity(it) }.sortedBy { it.year }
-
-    fun toEntityListSearchNetworkEntity(initial: List<Movie>)  =
-        initial.map { mapToEntity(it) }
 
 }

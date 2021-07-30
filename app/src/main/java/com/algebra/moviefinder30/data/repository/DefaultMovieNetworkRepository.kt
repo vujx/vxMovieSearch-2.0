@@ -1,9 +1,6 @@
 package com.algebra.moviefinder30.data.repository
 
-import android.content.res.Resources
-import android.util.Log
 import com.algebra.moviefinder30.BuildConfig
-import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.data.network.MovieService
 import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.model.remote.MovieDetails
@@ -26,7 +23,6 @@ class DefaultMovieNetworkRepository @Inject constructor(private val apiService: 
 
     override suspend fun getMoviesByYear(searchValue: String): List<Movie>? {
         val response = apiService.getSearchMovies(BuildConfig.APIKey, searchValue)
-        Log.d("ispiso", response.body().toString())
         return if(response.isSuccessful) response.body()?.let {
             if(it.Response == "False"){
                 emptyList()

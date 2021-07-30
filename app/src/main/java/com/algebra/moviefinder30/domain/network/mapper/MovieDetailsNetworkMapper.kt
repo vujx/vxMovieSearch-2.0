@@ -3,6 +3,7 @@ package com.algebra.moviefinder30.domain.network.mapper
 import com.algebra.moviefinder30.data.model.remote.details.MovieDetailsNetworkEntity
 import com.algebra.moviefinder30.domain.model.remote.MovieDetails
 import com.algebra.moviefinder30.domain.EntityMapper
+import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.util.checkPictureURL
 import com.algebra.moviefinder30.domain.util.checkValue
 import com.algebra.moviefinder30.domain.util.checkYear
@@ -15,7 +16,7 @@ class MovieDetailsNetworkMapper: EntityMapper<MovieDetailsNetworkEntity, MovieDe
         checkValue(entity.Plot), checkValue(entity.Genre))
     }
 
-    fun toEntityListMovieDetails(initial: List<MovieDetailsNetworkEntity>): List<MovieDetails>
-        = initial.map { mapFromEntity(it) }
-
+    fun mapToMovie(movieDetails: MovieDetails): Movie {
+        return Movie(movieDetails.title, movieDetails.year, movieDetails.pictureURL, movieDetails.imdbId)
+    }
 }

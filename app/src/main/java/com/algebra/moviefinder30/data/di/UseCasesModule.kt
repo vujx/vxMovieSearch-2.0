@@ -9,7 +9,6 @@ import com.algebra.moviefinder30.domain.repository.network.MovieNetworkRepositor
 import com.algebra.moviefinder30.domain.usecase.db.favorite.*
 import com.algebra.moviefinder30.domain.usecase.db.search.GetSearchMovieByYear
 import com.algebra.moviefinder30.domain.usecase.db.search.InsertSearchMovie
-import com.algebra.moviefinder30.domain.usecase.network.GetMovieByTitle
 import com.algebra.moviefinder30.domain.usecase.network.GetMovieByYear
 import com.algebra.moviefinder30.domain.usecase.network.GetMovieDetailsById
 import dagger.Module
@@ -26,7 +25,6 @@ object UseCasesModule {
      @Singleton
      fun provideNetworkUseCase(repo: MovieNetworkRepository) =
          UseCaseNetwork(
-             GetMovieByTitle(repo),
              GetMovieByYear(repo),
              GetMovieDetailsById(repo)
          )
@@ -36,7 +34,6 @@ object UseCasesModule {
     fun provideUseCaseDbFavorite(repo: FavoriteMovieRepository) =
         UseCaseDbFavorite(
             GetAllFavoriteMovies(repo),
-            GetFavoriteMovie(repo),
             InsertFavoriteMovie(repo),
             RemoveAllFavoriteMovie(repo),
             RemoveFavoriteMovie(repo)

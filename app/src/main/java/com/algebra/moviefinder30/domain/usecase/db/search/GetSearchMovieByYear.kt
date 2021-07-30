@@ -1,6 +1,5 @@
 package com.algebra.moviefinder30.domain.usecase.db.search
 
-import com.algebra.moviefinder30.data.model.local.SearchEntity
 import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.repository.db.search.MovieSearchRepository
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase

@@ -1,8 +1,6 @@
 package com.algebra.moviefinder30.data.repository
 
 import com.algebra.moviefinder30.data.db.SearchDao
-import com.algebra.moviefinder30.data.model.local.SearchEntity
-import com.algebra.moviefinder30.data.model.remote.movie.SearchNetworkEntity
 import com.algebra.moviefinder30.domain.db.SearchMovieMapper
 import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.repository.db.search.MovieSearchLocalDataSource

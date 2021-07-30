@@ -2,7 +2,6 @@ package com.algebra.moviefinder30.data.network
 
 import com.algebra.moviefinder30.data.model.remote.details.MovieDetailsNetworkEntity
 import com.algebra.moviefinder30.data.model.remote.movie.MovieNetworkEntity
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

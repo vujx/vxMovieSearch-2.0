@@ -1,6 +1,8 @@
 package com.algebra.moviefinder30.presentation.util
 
 import androidx.lifecycle.MutableLiveData
+import com.algebra.moviefinder30.App
+import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.data.usecase.UseCaseDbSearch
 import com.algebra.moviefinder30.data.usecase.UseCaseNetwork
 import com.algebra.moviefinder30.domain.model.remote.Movie
@@ -27,7 +29,7 @@ suspend fun fetchMoviesFromNetwork(useCaseNetwork: UseCaseNetwork, searchValue: 
                 result.forEach {
                     viewModel.addMovieToSearchDb(it)
                 }
-            } else _movies.postValue(ResultOf.Failure("Something went wrong, try again!", null))
+            } else _movies.postValue(ResultOf.Failure(App.getResource().getString(R.string.error_message), null))
         }
 
         override fun onError(throwable: Throwable) {
