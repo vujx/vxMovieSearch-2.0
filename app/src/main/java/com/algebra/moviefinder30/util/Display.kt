@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.FragmentActivity
 import com.algebra.moviefinder30.R
+import com.algebra.moviefinder30.presentation.ui.MainActivity
 import com.algebra.moviefinder30.presentation.ui.dialog.CustomDialog
-import com.algebra.moviefinder30.presentation.ui.favorites.FavoriteFragment
 import com.algebra.moviefinder30.presentation.viewmodel.FavoriteMoviesViewModel
 import com.bumptech.glide.Glide
 
@@ -49,15 +49,18 @@ fun showRemoveDialog(requireActivity: FragmentActivity, viewModel: FavoriteMovie
 }
 
 fun exitFromApp(activity: AppCompatActivity){
-    activity.supportFragmentManager.findFragmentById(R.id.favoriteFragment)?.let {
-        if (it is FavoriteFragment) {
+    activity.supportFragmentManager.findFragmentById(R.id.fragment)?.let {
+        if (it.childFragmentManager.fragments[0].toString().contains("FavoriteFragment")) {
             val dialog = CustomDialog(activity.getString(R.string.exit_app))
             dialog.show(activity.supportFragmentManager, "Logout")
             dialog.listener = object : CustomDialog.Listener {
                 override fun okPress(isPress: Boolean) {
-                    finishAffinity(activity)
+                    if(isPress)
+                        finishAffinity(activity)
                 }
             }
+        } else{
+            (activity as MainActivity).onBack()
         }
     }
 }

@@ -13,11 +13,17 @@
         <action
             android:id="@+id/action_favoriteFragment_to_searchFragment2"
             app:destination="@id/searchFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right"  />
         <action
             android:id="@+id/action_favoriteFragment_to_detailsFragment3"
             app:destination="@id/detailsFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -27,11 +33,17 @@
         <action
             android:id="@+id/action_detailsFragment_to_searchFragment3"
             app:destination="@id/searchFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@anim/slide_right"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_left"/>
         <action
             android:id="@+id/action_detailsFragment_to_favoriteFragment2"
             app:destination="@id/favoriteFragment"
-            app:enterAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_right"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_left"/>
         <argument
             android:name="imdb"
             app:argType="string" />
@@ -47,10 +59,17 @@
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment2"
             app:destination="@id/detailsFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+
         <action
             android:id="@+id/action_searchFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment"
-            app:enterAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_right"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_left"/>
     </fragment>
 </navigation>

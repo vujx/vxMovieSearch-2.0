@@ -14,8 +14,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         exitFromApp(this)
+    }
+
+    fun onBack(){
+        super.onBackPressed()
     }
 
     companion object{
