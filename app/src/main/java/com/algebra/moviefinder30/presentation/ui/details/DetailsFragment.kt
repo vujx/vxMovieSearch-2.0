@@ -45,55 +45,61 @@ class DetailsFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun setUpToolbar(){
+    private fun setUpToolbar() {
         binding.toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_arrow_back_24)
         binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-        if(isFav)
+        if (isFav)
             binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_border_24_black))
     }
 
     @SuppressLint("SetTextI18n")
     private fun bind() {
-        viewModelDetails.notification.observe(viewLifecycleOwner, {result ->
-            hideProgressBar(binding.progressBar)
-            if(result != null && !result.hasBeenHandled()) displayMessage(result.contentIfNotHandled.toString(), requireContext())
-        })
-
-        viewModelDetails.movieDetail.observe(viewLifecycleOwner, {result ->
-            when (result) {
-                is ResultOf.Success -> {
-                    movieDetails = result.value
-                    hideProgressBar(binding.progressBar)
-                    binding.apply {
-                        hideProgressBar(binding.progressBar)
-                        ivImdb.visibility = View.VISIBLE
-                        view?.let { displayPic(it, result.value.pictureURL, ivMovie) }
-                        tvDesc.text = result.value.description
-                        tvDurationAndPublish.text = result.value.duration
-                        tvGenre.text = result.value.genre
-                        if(result.value.imdbRating != App.getResource().getString(R.string.check_value_message)) tvRating.text = "${result.value.imdbRating}/10"
-                        else tvRating.text = result.value.imdbRating
-                        tvTitle.text = result.value.title
-                    }
-                }
-                is ResultOf.Failure -> {
-                    hideProgressBar(binding.progressBar)
-                    result.throwable?.let { displayErrorMessage(it, requireContext()) }
-                }
-                is ResultOf.Loading -> displayProgressBar(binding.progressBar)
+        viewModelDetails.notification.observe(
+            viewLifecycleOwner,
+            { result ->
+                hideProgressBar(binding.progressBar)
+                if (result != null && !result.hasBeenHandled()) displayMessage(result.contentIfNotHandled.toString(), requireContext())
             }
-        })
+        )
+
+        viewModelDetails.movieDetail.observe(
+            viewLifecycleOwner,
+            { result ->
+                when (result) {
+                    is ResultOf.Success -> {
+                        movieDetails = result.value
+                        hideProgressBar(binding.progressBar)
+                        binding.apply {
+                            hideProgressBar(binding.progressBar)
+                            ivImdb.visibility = View.VISIBLE
+                            view?.let { displayPic(it, result.value.pictureURL, ivMovie) }
+                            tvDesc.text = result.value.description
+                            tvDurationAndPublish.text = result.value.duration
+                            tvGenre.text = result.value.genre
+                            if (result.value.imdbRating != App.getResource().getString(R.string.check_value_message)) tvRating.text = "${result.value.imdbRating}/10"
+                            else tvRating.text = result.value.imdbRating
+                            tvTitle.text = result.value.title
+                        }
+                    }
+                    is ResultOf.Failure -> {
+                        hideProgressBar(binding.progressBar)
+                        result.throwable?.let { displayErrorMessage(it, requireContext()) }
+                    }
+                    is ResultOf.Loading -> displayProgressBar(binding.progressBar)
+                }
+            }
+        )
     }
 
-    private fun clickListener(){
+    private fun clickListener() {
         binding.ivFavMovie.setOnClickListener {
-           if(isFav && movieDetails != null){
+            if (isFav && movieDetails != null) {
                 isFav = false
                 binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_border_24))
-                movieDetails?.imdbId?.let {  viewModelDetails.removeMovieFromFavorite(it) }
-            } else if(movieDetails != null){
+                movieDetails?.imdbId?.let { viewModelDetails.removeMovieFromFavorite(it) }
+            } else if (movieDetails != null) {
                 isFav = true
                 binding.ivFavMovie.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_border_24_black))
                 movieDetails?.let { viewModelDetails.addMovieToFavorite(it) }

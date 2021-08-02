@@ -14,5 +14,4 @@ interface SearchDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchMovie(searchMovie: SearchEntity)
-
 }

@@ -10,17 +10,19 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.databinding.FragmentFavoriteBinding
+import com.algebra.moviefinder30.presentation.ui.dialog.DialogListener
 import com.algebra.moviefinder30.presentation.viewmodel.FavoriteMoviesViewModel
 import com.algebra.moviefinder30.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), FavoriteAdapterListener, DialogListener {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding: FragmentFavoriteBinding get() = _binding!!
     private val viewModelFavorite: FavoriteMoviesViewModel by viewModels()
-    private val adapter = FavoriteAdapter()
+
+    private val adapter = FavoriteAdapter(this)
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +35,6 @@ class FavoriteFragment : Fragment() {
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
         setUpRecyclerView()
-        clickListener()
         onBind()
         viewModelFavorite.getAllFavoriteMovies()
         return binding.root
@@ -55,53 +56,59 @@ class FavoriteFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.deleteAllFavoriteMovies) showRemoveDialog(requireActivity(), viewModelFavorite)
+        if (item.itemId == R.id.deleteAllFavoriteMovies) showRemoveDialog(requireActivity(), this)
         return super.onOptionsItemSelected(item)
     }
 
-    private fun onBind(){
-        viewModelFavorite.favorites.observe(viewLifecycleOwner, {result ->
-            when (result) {
-                is ResultOf.Success -> {
-                    hideProgressBar(binding.progressBar)
-                    if(result.value.isEmpty()){
-                        binding.tvTitleFavorite.text = context?.getString(R.string.favorite)
-                        binding.tvDisplayMess.text = context?.getString(R.string.message_no_favorite_movies)
-                    } else {
-                        binding.tvTitleFavorite.text = ""
-                        binding.tvDisplayMess.text = ""
+    private fun onBind() {
+        viewModelFavorite.favorites.observe(
+            viewLifecycleOwner,
+            { result ->
+                when (result) {
+                    is ResultOf.Success -> {
+                        hideProgressBar(binding.progressBar)
+                        if (result.value.isEmpty()) {
+                            binding.tvTitleFavorite.text = context?.getString(R.string.favorite)
+                            binding.tvDisplayMess.text = context?.getString(R.string.message_no_favorite_movies)
+                        } else {
+                            binding.tvTitleFavorite.text = ""
+                            binding.tvDisplayMess.text = ""
+                        }
+                        adapter.setList(result.value)
                     }
-                    adapter.setList(result.value)
+                    is ResultOf.Failure -> {
+                        hideProgressBar(binding.progressBar)
+                        result.throwable?.let { displayErrorMessage(it, requireContext()) }
+                    }
+                    is ResultOf.Loading -> displayProgressBar(binding.progressBar)
                 }
-                is ResultOf.Failure -> {
-                    hideProgressBar(binding.progressBar)
-                    result.throwable?.let { displayErrorMessage(it, requireContext()) }
-                }
-                is ResultOf.Loading -> displayProgressBar(binding.progressBar)
             }
-        })
+        )
 
-        viewModelFavorite.notification.observe(viewLifecycleOwner, {result ->
-            hideProgressBar(binding.progressBar)
-            if(result != null && !result.hasBeenHandled()) displayMessage(result.contentIfNotHandled.toString(), requireContext())
-        })
+        viewModelFavorite.notification.observe(
+            viewLifecycleOwner,
+            { result ->
+                hideProgressBar(binding.progressBar)
+                if (result != null && !result.hasBeenHandled()) displayMessage(result.contentIfNotHandled.toString(), requireContext())
+            }
+        )
     }
 
-    private fun setUpRecyclerView(){
+    private fun setUpRecyclerView() {
         binding.rvFavorite.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFavorite.adapter = adapter
     }
 
-    private fun clickListener(){
-        adapter.listener = object: FavoriteAdapter.Listener{
-            override fun onFavClick(imdbId: String) {
-                viewModelFavorite.removeFavoriteMovie(imdbId)
-            }
+    override fun onFavClick(imdbId: String) {
+        viewModelFavorite.removeFavoriteMovie(imdbId)
+    }
 
-            override fun onItemClick(imdbId: String, title: String) {
-                val action = FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment3(imdbId)
-                view?.let { Navigation.findNavController(it).navigate(action) }
-            }
-        }
+    override fun onItemClick(imdbId: String, title: String) {
+        val action = FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment3(imdbId)
+        view?.let { Navigation.findNavController(it).navigate(action) }
+    }
+
+    override fun okPress() {
+        viewModelFavorite.removeAllFavoriteMovies()
     }
 }

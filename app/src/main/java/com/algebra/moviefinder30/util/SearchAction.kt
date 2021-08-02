@@ -14,32 +14,34 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("RestrictedApi", "CheckResult")
-fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesViewModel?){
+fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesViewModel?) {
     var checkIfSubmit = false
     Observable.create<String> { emiter ->
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    if(it.isNotEmpty()){
-                        MainActivity.searchValue = it.toLowerCase()
-                        checkIfSubmit = true
-                        if (viewModel == null)
-                            view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
-                        else
-                            viewModel.fetchMovies(it.toLowerCase())
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        if (it.isNotEmpty()) {
+                            MainActivity.searchValue = it.toLowerCase()
+                            checkIfSubmit = true
+                            if (viewModel == null)
+                                view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                            else
+                                viewModel.fetchMovies(it.toLowerCase())
+                        }
                     }
+                    return false
                 }
-                return false
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    if (!emiter.isDisposed)
-                        emiter.onNext(newText)
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        if (!emiter.isDisposed)
+                            emiter.onNext(newText)
+                    }
+                    return true
                 }
-                return true
             }
-        })
+        )
     }.debounce(1, TimeUnit.SECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -47,12 +49,10 @@ fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesVie
             when {
                 it.length >= 3 && !checkIfSubmit -> {
                     MainActivity.searchValue = it.toLowerCase(Locale.ROOT)
-                    if(viewModel == null)
-                    view?.let {view -> Navigation.findNavController(view).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                    if (viewModel == null)
+                        view?.let { view -> Navigation.findNavController(view).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
                     else viewModel.fetchMovies(it.toLowerCase(Locale.ROOT))
                 }
             }
         }
 }
-
-

@@ -5,13 +5,13 @@ import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.domain.repository.db.favorite.FavoriteMovieRepository
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 
-class RemoveAllFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository): BaseUseCase<Int?, String> {
+class RemoveAllFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository) : BaseUseCase<Int?, String> {
 
     override suspend fun execute(params: Int?, callback: BaseUseCase.Callback<String>) {
-        try{
+        try {
             favoriteRepo.removeAllFavoritesMovie()
             callback.onSuccess(App.getResource().getString(R.string.remove_all_from_fav))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             callback.onError(e)
         }
     }

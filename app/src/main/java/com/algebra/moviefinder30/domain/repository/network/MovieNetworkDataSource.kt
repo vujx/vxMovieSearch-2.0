@@ -8,5 +8,4 @@ interface MovieNetworkDataSource {
     suspend fun getMoviesByTitle(searchValue: String): List<Movie>?
     suspend fun getMoviesByYear(searchValue: String): List<Movie>?
     suspend fun getMoviesDetailsById(imdbId: String): MovieDetails?
-
 }

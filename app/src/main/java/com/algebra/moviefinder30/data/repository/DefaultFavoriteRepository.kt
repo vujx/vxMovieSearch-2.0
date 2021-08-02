@@ -7,7 +7,7 @@ import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.repository.db.favorite.FavoriteMovieLocalDataSource
 import javax.inject.Inject
 
-class DefaultFavoriteRepository @Inject constructor(private val favoriteMovieDao: FavoriteMovieDao): FavoriteMovieLocalDataSource{
+class DefaultFavoriteRepository @Inject constructor(private val favoriteMovieDao: FavoriteMovieDao) : FavoriteMovieLocalDataSource {
 
     private val favoriteMapper = FavoriteMovieMapper()
 
@@ -20,5 +20,4 @@ class DefaultFavoriteRepository @Inject constructor(private val favoriteMovieDao
     override suspend fun removeAllFavoritesMovie() = favoriteMovieDao.removeAllFavoritesMovie()
 
     override suspend fun getFavoriteMovie(id: Int): FavoriteMovieEntity? = favoriteMovieDao.getMovieEntity(id)
-
 }

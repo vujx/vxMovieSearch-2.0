@@ -6,9 +6,8 @@ import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
 import com.algebra.moviefinder30.data.model.local.SearchEntity
 
 @Database(entities = [FavoriteMovieEntity::class, SearchEntity::class], version = 1)
-abstract class AppDatabase: RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteDao(): FavoriteMovieDao
     abstract fun searchHistoryDao(): SearchDao
-
 }

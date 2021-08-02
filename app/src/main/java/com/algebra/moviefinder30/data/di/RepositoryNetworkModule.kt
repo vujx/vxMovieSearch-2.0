@@ -30,5 +30,4 @@ object RepositoryNetworkModule {
     @Provides
     @Singleton
     fun provideDBSearchRepo(searchDao: SearchDao) = MovieSearchRepository(DefaultSearchRepository(searchDao))
-
 }

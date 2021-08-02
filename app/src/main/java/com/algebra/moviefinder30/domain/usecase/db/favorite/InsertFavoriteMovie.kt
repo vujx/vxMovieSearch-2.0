@@ -6,15 +6,14 @@ import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.repository.db.favorite.FavoriteMovieRepository
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 
-class InsertFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository): BaseUseCase<Movie, String> {
+class InsertFavoriteMovie(private val favoriteRepo: FavoriteMovieRepository) : BaseUseCase<Movie, String> {
 
     override suspend fun execute(params: Movie, callback: BaseUseCase.Callback<String>) {
-        try{
+        try {
             favoriteRepo.insertFavoriteMovie(params)
             callback.onSuccess(App.getResource().getString(R.string.added_fav_movie))
-        } catch (e: Exception){
+        } catch (e: Exception) {
             callback.onError(e)
         }
     }
-
 }

@@ -6,11 +6,10 @@ import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.repository.db.search.MovieSearchLocalDataSource
 import javax.inject.Inject
 
-class DefaultSearchRepository @Inject constructor(private val searchDao: SearchDao): MovieSearchLocalDataSource {
+class DefaultSearchRepository @Inject constructor(private val searchDao: SearchDao) : MovieSearchLocalDataSource {
 
     private val searchMapper = SearchMovieMapper()
 
     override suspend fun getSearchMoviesByYear(searchValue: String): List<Movie> = searchMapper.toEntityListMovie(searchDao.getSearchMoviesByYear(searchValue))
     override suspend fun insertSearchMovie(searchMovie: Movie) = searchDao.insertSearchMovie(searchMapper.mapFromEntity(searchMovie))
-
 }

@@ -5,16 +5,15 @@ import com.algebra.moviefinder30.domain.repository.network.MovieNetworkRepositor
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 import java.lang.Exception
 
-class GetMovieByYear(private val movieRepo: MovieNetworkRepository):
+class GetMovieByYear(private val movieRepo: MovieNetworkRepository) :
     BaseUseCase<String, List<Movie>?> {
 
     override suspend fun execute(params: String, callback: BaseUseCase.Callback<List<Movie>?>) {
-        return try{
+        return try {
             val movies = movieRepo.getMoviesByYear(params)
             callback.onSuccess(movies)
-        } catch(e: Exception){
+        } catch (e: Exception) {
             callback.onError(e)
         }
     }
-
 }

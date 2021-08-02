@@ -22,5 +22,5 @@ interface FavoriteMovieDao {
     suspend fun removeAllFavoritesMovie()
 
     @Query("SELECT * FROM FavoriteMovies WHERE id = :id")
-    suspend fun getMovieEntity(id : Int) : FavoriteMovieEntity?
+    suspend fun getMovieEntity(id: Int): FavoriteMovieEntity?
 }

@@ -7,5 +7,4 @@ class MovieSearchRepository(private val dataSource: MovieSearchLocalDataSource) 
     suspend fun getSearchMoviesByYear(searchValue: String) = dataSource.getSearchMoviesByYear(searchValue)
 
     suspend fun insertSearchMovie(searchMovie: Movie) = dataSource.insertSearchMovie(searchMovie)
-
 }

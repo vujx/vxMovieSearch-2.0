@@ -5,16 +5,15 @@ import com.algebra.moviefinder30.domain.repository.network.MovieNetworkRepositor
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 import java.lang.Exception
 
-class GetMovieDetailsById(private val movieRepo: MovieNetworkRepository):
+class GetMovieDetailsById(private val movieRepo: MovieNetworkRepository) :
     BaseUseCase<String, MovieDetails> {
 
     override suspend fun execute(params: String, callback: BaseUseCase.Callback<MovieDetails>) {
-        return try{
+        return try {
             val movieDetails = movieRepo.getMovieDetailsById(params)
             callback.onSuccess(movieDetails!!)
-        } catch(e: Exception){
+        } catch (e: Exception) {
             callback.onError(e)
         }
     }
-
 }

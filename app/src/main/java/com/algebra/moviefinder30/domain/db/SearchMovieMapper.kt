@@ -9,14 +9,12 @@ import com.algebra.moviefinder30.domain.util.checkYear
 import com.algebra.moviefinder30.presentation.ui.MainActivity
 import java.util.*
 
-class SearchMovieMapper: EntityMapper<Movie, SearchEntity> {
+class SearchMovieMapper : EntityMapper<Movie, SearchEntity> {
 
     override fun mapFromEntity(entity: Movie): SearchEntity =
         SearchEntity(0, checkValue(entity.title), checkYear(entity.year), checkPictureURL(entity.pictureURL), checkValue(entity.imdbId), MainActivity.searchValue.toLowerCase(Locale.ROOT))
 
     private fun mapFromSearchEntityToMovie(entity: SearchEntity) = Movie(entity.title, entity.year, entity.pictureURL, entity.imdbId)
 
-    fun toEntityListMovie(initial: List<SearchEntity>): List<Movie>
-        =initial.map { mapFromSearchEntityToMovie(it) }
-
+    fun toEntityListMovie(initial: List<SearchEntity>): List<Movie> = initial.map { mapFromSearchEntityToMovie(it) }
 }

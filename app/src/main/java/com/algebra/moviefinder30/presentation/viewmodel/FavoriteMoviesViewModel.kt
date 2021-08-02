@@ -18,10 +18,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteMoviesViewModel @Inject constructor(private val useCases: UseCaseDbFavorite): ViewModel() {
+class FavoriteMoviesViewModel @Inject constructor(private val useCases: UseCaseDbFavorite) : ViewModel() {
 
     private val _favorites = MutableLiveData<ResultOf<List<FavoriteMovieEntity>>>()
-    val favorites : LiveData<ResultOf<List<FavoriteMovieEntity>>> = _favorites
+    val favorites: LiveData<ResultOf<List<FavoriteMovieEntity>>> = _favorites
 
     private val _notification: MutableLiveData<Event<String>> = MutableLiveData()
     val notification: LiveData<Event<String>> = _notification
@@ -40,7 +40,7 @@ class FavoriteMoviesViewModel @Inject constructor(private val useCases: UseCaseD
         getAllFavoriteMovies()
     }
 
-    private fun onError(message: String){
+    private fun onError(message: String) {
         _notification.postValue(Event(message))
     }
 

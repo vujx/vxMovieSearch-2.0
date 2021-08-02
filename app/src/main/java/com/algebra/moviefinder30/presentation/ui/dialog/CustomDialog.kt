@@ -6,22 +6,15 @@ import androidx.fragment.app.DialogFragment
 import com.algebra.moviefinder30.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class CustomDialog(private val title: String): DialogFragment()  {
-
-    var listener: Listener? = null
+class CustomDialog(private val title: String, private val listener: DialogListener) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): AlertDialog {
         return MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog_OK_color).setView(view)
             .setMessage(title)
             .setPositiveButton("Ok") { dialog, which ->
-                listener?.okPress(true)
+                listener.okPress()
             }.setNegativeButton("Cancel") { dialog, which ->
                 getDialog()?.cancel()
             }.create()
     }
-
-    interface Listener{
-        fun okPress(isPress: Boolean)
-    }
-
 }

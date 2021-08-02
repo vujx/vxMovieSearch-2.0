@@ -5,7 +5,6 @@ import com.algebra.moviefinder30.App
 import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.data.network.MovieService
 import com.algebra.moviefinder30.domain.network.connection.ConnectivityInterceptorImpl
-import com.readystatesoftware.chuck.ChuckInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +43,7 @@ object ApiServiceModule {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         return OkHttpClient.Builder()
-            //.addInterceptor(ChuckInterceptor(context))
+            // .addInterceptor(ChuckInterceptor(context))
             .addInterceptor(logging)
             .addInterceptor(ConnectivityInterceptorImpl(context))
             .build()

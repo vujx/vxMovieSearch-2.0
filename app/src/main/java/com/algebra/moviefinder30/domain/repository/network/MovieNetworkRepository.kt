@@ -7,5 +7,4 @@ class MovieNetworkRepository(private val dataSource: MovieNetworkDataSource) {
     suspend fun getMoviesByTitle(searchValue: String) = dataSource.getMoviesByTitle(searchValue)
 
     suspend fun getMoviesByYear(searchValue: String) = dataSource.getMoviesByYear(searchValue)
-
 }

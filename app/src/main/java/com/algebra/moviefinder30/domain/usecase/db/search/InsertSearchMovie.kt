@@ -4,15 +4,14 @@ import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.repository.db.search.MovieSearchRepository
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 
-class InsertSearchMovie(private val searchRepo: MovieSearchRepository): BaseUseCase<Movie, String> {
+class InsertSearchMovie(private val searchRepo: MovieSearchRepository) : BaseUseCase<Movie, String> {
 
     override suspend fun execute(params: Movie, callback: BaseUseCase.Callback<String>) {
-        return try{
+        return try {
             searchRepo.insertSearchMovie(params)
             callback.onSuccess("")
-        } catch (e: Exception){
+        } catch (e: Exception) {
             callback.onError(e)
         }
     }
-
 }

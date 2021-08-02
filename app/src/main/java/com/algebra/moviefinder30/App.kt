@@ -9,14 +9,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        mInstace = this
-        myResources = resources
+        getResources = resources
     }
 
-    companion object{
-        lateinit var mInstace: App
-        lateinit var myResources: Resources
-        fun getInstance() = mInstace
-        fun getResource() = myResources
+    companion object {
+        lateinit var getResources: Resources
+        fun getResource() = getResources
     }
 }
