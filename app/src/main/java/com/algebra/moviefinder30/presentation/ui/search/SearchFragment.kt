@@ -16,6 +16,7 @@ import com.algebra.moviefinder30.presentation.ui.MainActivity
 import com.algebra.moviefinder30.presentation.viewmodel.SearchMoviesViewModel
 import com.algebra.moviefinder30.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchAdapterListener {
@@ -24,7 +25,8 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     private val binding: FragmentSearchBinding get() = _binding!!
     private val viewModelSearch: SearchMoviesViewModel by viewModels()
 
-    private val adapter = SearchAdapter(this)
+    @Inject
+    lateinit var adapter: SearchAdapter
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        adapter.setListener(this)
         setUpToolbar()
         setUpRecyclerView()
         clickListener()

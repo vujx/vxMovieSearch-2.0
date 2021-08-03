@@ -11,9 +11,9 @@ class CustomDialog(private val title: String, private val listener: DialogListen
     override fun onCreateDialog(savedInstanceState: Bundle?): AlertDialog {
         return MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog_OK_color).setView(view)
             .setMessage(title)
-            .setPositiveButton("Ok") { dialog, which ->
+            .setPositiveButton("Ok") { _, _ ->
                 listener.okPress()
-            }.setNegativeButton("Cancel") { dialog, which ->
+            }.setNegativeButton("Cancel") { _, _ ->
                 getDialog()?.cancel()
             }.create()
     }

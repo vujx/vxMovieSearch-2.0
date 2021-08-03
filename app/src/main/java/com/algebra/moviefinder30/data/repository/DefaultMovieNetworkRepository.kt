@@ -14,13 +14,6 @@ class DefaultMovieNetworkRepository @Inject constructor(private val apiService: 
     private val networkMapper = MovieNetworkMapper()
     private val networkDetailsMapper = MovieDetailsNetworkMapper()
 
-    override suspend fun getMoviesByTitle(searchValue: String): List<Movie>? {
-        val response = apiService.getSearchMovies(BuildConfig.APIKey, searchValue)
-        return if (response.isSuccessful) response.body()?.let {
-            networkMapper.toEntityListMovie(it.Search)
-        } else null
-    }
-
     override suspend fun getMoviesByYear(searchValue: String): List<Movie>? {
         val response = apiService.getSearchMovies(BuildConfig.APIKey, searchValue)
         return if (response.isSuccessful) response.body()?.let {

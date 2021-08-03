@@ -22,12 +22,12 @@ fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesVie
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {
                         if (it.isNotEmpty()) {
-                            MainActivity.searchValue = it.toLowerCase()
+                            MainActivity.searchValue = it.toLowerCase(Locale.ROOT)
                             checkIfSubmit = true
                             if (viewModel == null)
                                 view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
                             else
-                                viewModel.fetchMovies(it.toLowerCase())
+                                viewModel.fetchMovies(it.toLowerCase(Locale.ROOT))
                         }
                     }
                     return false

@@ -8,10 +8,11 @@ import com.algebra.moviefinder30.databinding.SearchMovieItemBinding
 import com.algebra.moviefinder30.domain.model.remote.Movie
 import javax.inject.Inject
 
-class SearchAdapter @Inject constructor(private val listener: SearchAdapterListener) : RecyclerView.Adapter<SearchMovieViewHolder>() {
+class SearchAdapter @Inject constructor() : RecyclerView.Adapter<SearchMovieViewHolder>() {
 
     private val listOfMovies = mutableListOf<Movie>()
     private var listOfFavMovies = mutableListOf<FavoriteMovieEntity>()
+    private lateinit var listener: SearchAdapterListener
 
     fun setMovieList(list: List<Movie>) {
         listOfMovies.clear()
@@ -23,6 +24,10 @@ class SearchAdapter @Inject constructor(private val listener: SearchAdapterListe
         listOfFavMovies.clear()
         listOfFavMovies.addAll(list)
         notifyDataSetChanged()
+    }
+
+    fun setListener(fragment: SearchFragment) {
+        listener = fragment
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchMovieViewHolder {

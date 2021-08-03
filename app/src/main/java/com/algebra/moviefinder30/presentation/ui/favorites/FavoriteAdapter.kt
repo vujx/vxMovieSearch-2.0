@@ -7,14 +7,19 @@ import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
 import com.algebra.moviefinder30.databinding.FavoriteMovieItemBinding
 import javax.inject.Inject
 
-class FavoriteAdapter @Inject constructor(private val listener: FavoriteAdapterListener) : RecyclerView.Adapter<FavoriteViewHolder>() {
+class FavoriteAdapter @Inject constructor() : RecyclerView.Adapter<FavoriteViewHolder>() {
 
     private val listOfFavoriteMovies = mutableListOf<FavoriteMovieEntity>()
+    private lateinit var listener: FavoriteAdapterListener
 
     fun setList(list: List<FavoriteMovieEntity>) {
         listOfFavoriteMovies.clear()
         listOfFavoriteMovies.addAll(list)
         notifyDataSetChanged()
+    }
+
+    fun setListener(fragment: FavoriteFragment) {
+        listener = fragment
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {

@@ -11,5 +11,6 @@ class DefaultSearchRepository @Inject constructor(private val searchDao: SearchD
     private val searchMapper = SearchMovieMapper()
 
     override suspend fun getSearchMoviesByYear(searchValue: String): List<Movie> = searchMapper.toEntityListMovie(searchDao.getSearchMoviesByYear(searchValue))
+
     override suspend fun insertSearchMovie(searchMovie: Movie) = searchDao.insertSearchMovie(searchMapper.mapFromEntity(searchMovie))
 }

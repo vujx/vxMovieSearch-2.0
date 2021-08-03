@@ -7,7 +7,6 @@ import com.algebra.moviefinder30.domain.model.remote.Movie
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
 import com.algebra.moviefinder30.util.Event
 import com.algebra.moviefinder30.util.ResultOf
-import java.util.*
 
 suspend fun removeFavMovie(useCasesFavorite: UseCaseDbFavorite, imdb: String, _notification: MutableLiveData<Event<String>>) {
     useCasesFavorite.removeFavoriteMovie.execute(

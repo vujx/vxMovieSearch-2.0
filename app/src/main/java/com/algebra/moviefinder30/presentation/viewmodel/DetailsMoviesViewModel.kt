@@ -32,7 +32,7 @@ class DetailsMoviesViewModel @Inject constructor(private val useCaseNetwork: Use
         _notification.postValue(Event(message))
     }
 
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError(throwable.message.toString())
     }
 

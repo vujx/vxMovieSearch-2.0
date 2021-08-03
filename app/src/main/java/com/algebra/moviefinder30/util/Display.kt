@@ -39,7 +39,6 @@ fun hideProgressBar(progressBar: ProgressBar) {
 fun showRemoveDialog(requireActivity: FragmentActivity, fragment: FavoriteFragment) {
     val dialog = CustomDialog(requireActivity.getString(R.string.remove_fav), fragment)
     dialog.show(requireActivity.supportFragmentManager, "RemoveFavoriteMovies")
-    fragment.okPress()
 }
 
 fun exitFromApp(activity: MainActivity) {
@@ -47,8 +46,7 @@ fun exitFromApp(activity: MainActivity) {
         if (it.childFragmentManager.fragments[0].toString().contains("FavoriteFragment")) {
             val dialog = CustomDialog(activity.getString(R.string.exit_app), activity)
             dialog.show(activity.supportFragmentManager, "Logout")
-            activity.okPress()
-        } else activity.onBack()
+        }
     }
 }
 

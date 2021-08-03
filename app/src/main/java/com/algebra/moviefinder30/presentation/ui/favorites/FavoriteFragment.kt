@@ -2,6 +2,7 @@ package com.algebra.moviefinder30.presentation.ui.favorites
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -10,10 +11,12 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.databinding.FragmentFavoriteBinding
+import com.algebra.moviefinder30.presentation.ui.MainActivity
 import com.algebra.moviefinder30.presentation.ui.dialog.DialogListener
 import com.algebra.moviefinder30.presentation.viewmodel.FavoriteMoviesViewModel
 import com.algebra.moviefinder30.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(), FavoriteAdapterListener, DialogListener {
@@ -22,7 +25,8 @@ class FavoriteFragment : Fragment(), FavoriteAdapterListener, DialogListener {
     private val binding: FragmentFavoriteBinding get() = _binding!!
     private val viewModelFavorite: FavoriteMoviesViewModel by viewModels()
 
-    private val adapter = FavoriteAdapter(this)
+    @Inject
+    lateinit var adapter: FavoriteAdapter
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +34,18 @@ class FavoriteFragment : Fragment(), FavoriteAdapterListener, DialogListener {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            exitFromApp(requireActivity() as MainActivity)
+        }
+
+        adapter.setListener(this)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
         setUpRecyclerView()
         onBind()
@@ -69,7 +82,8 @@ class FavoriteFragment : Fragment(), FavoriteAdapterListener, DialogListener {
                         hideProgressBar(binding.progressBar)
                         if (result.value.isEmpty()) {
                             binding.tvTitleFavorite.text = context?.getString(R.string.favorite)
-                            binding.tvDisplayMess.text = context?.getString(R.string.message_no_favorite_movies)
+                            binding.tvDisplayMess.text =
+                                context?.getString(R.string.message_no_favorite_movies)
                         } else {
                             binding.tvTitleFavorite.text = ""
                             binding.tvDisplayMess.text = ""
@@ -89,7 +103,10 @@ class FavoriteFragment : Fragment(), FavoriteAdapterListener, DialogListener {
             viewLifecycleOwner,
             { result ->
                 hideProgressBar(binding.progressBar)
-                if (result != null && !result.hasBeenHandled()) displayMessage(result.contentIfNotHandled.toString(), requireContext())
+                if (result != null && !result.hasBeenHandled()) displayMessage(
+                    result.contentIfNotHandled.toString(),
+                    requireContext()
+                )
             }
         )
     }

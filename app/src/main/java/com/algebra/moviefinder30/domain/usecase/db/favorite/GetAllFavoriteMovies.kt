@@ -13,7 +13,7 @@ class GetAllFavoriteMovies(private val favoriteRepo: FavoriteMovieRepository) : 
     ) {
         try {
             val result = favoriteRepo.getAllFavoritesMovies()
-            callback.onSuccess(result as List<FavoriteMovieEntity>)
+            callback.onSuccess(result)
         } catch (e: Exception) {
             callback.onError(e)
         }
