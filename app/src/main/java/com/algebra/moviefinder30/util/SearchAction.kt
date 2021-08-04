@@ -7,52 +7,48 @@ import androidx.navigation.Navigation
 import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.presentation.ui.MainActivity
 import com.algebra.moviefinder30.presentation.viewmodel.SearchMoviesViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import java.util.*
-import java.util.concurrent.TimeUnit
+
+var queryTextChangedJob: Job? = null
 
 @SuppressLint("RestrictedApi", "CheckResult")
 fun searchAction(searchView: SearchView, view: View?, viewModel: SearchMoviesViewModel?) {
-    var checkIfSubmit = false
-    Observable.create<String> { emiter ->
-        searchView.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        if (it.isNotEmpty()) {
-                            MainActivity.searchValue = it.toLowerCase(Locale.ROOT)
-                            checkIfSubmit = true
-                            if (viewModel == null)
-                                view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
-                            else
-                                viewModel.fetchMovies(it.toLowerCase(Locale.ROOT))
-                        }
+    searchView.setOnQueryTextListener(
+        object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    if (it.isNotEmpty()) {
+                        MainActivity.searchValue = it.toLowerCase(Locale.ROOT)
+                        if (viewModel == null)
+                            view?.let { Navigation.findNavController(it).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+                        else
+                            viewModel.fetchMovies(it.toLowerCase(Locale.ROOT))
                     }
-                    return false
                 }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    newText?.let {
-                        if (!emiter.isDisposed)
-                            emiter.onNext(newText)
-                    }
-                    return true
-                }
+                return false
             }
-        )
-    }.debounce(1, TimeUnit.SECONDS)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe {
-            when {
-                it.length >= 3 && !checkIfSubmit -> {
-                    MainActivity.searchValue = it.toLowerCase(Locale.ROOT)
-                    if (viewModel == null)
-                        view?.let { view -> Navigation.findNavController(view).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
-                    else viewModel.fetchMovies(it.toLowerCase(Locale.ROOT))
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                queryTextChangedJob?.cancel()
+
+                queryTextChangedJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000)
+                    performSearch(newText ?: "", viewModel, view)
                 }
+                return true
             }
         }
+    )
+}
+
+private fun performSearch(query: String, viewModel: SearchMoviesViewModel?, mView: View?) {
+    when {
+        query.length >= 3 -> {
+            MainActivity.searchValue = query.toLowerCase(Locale.ROOT)
+            if (viewModel == null)
+                mView?.let { view -> Navigation.findNavController(view).navigate(R.id.action_favoriteFragment_to_searchFragment2) }
+            else viewModel.fetchMovies(query.toLowerCase(Locale.ROOT))
+        }
+    }
 }
