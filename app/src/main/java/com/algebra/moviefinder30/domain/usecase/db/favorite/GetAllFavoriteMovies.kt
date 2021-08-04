@@ -3,7 +3,6 @@ package com.algebra.moviefinder30.domain.usecase.db.favorite
 import com.algebra.moviefinder30.data.model.local.FavoriteMovieEntity
 import com.algebra.moviefinder30.domain.repository.db.favorite.FavoriteMovieRepository
 import com.algebra.moviefinder30.domain.usecase.BaseUseCase
-import java.lang.Exception
 
 class GetAllFavoriteMovies(private val favoriteRepo: FavoriteMovieRepository) : BaseUseCase<Int?, List<FavoriteMovieEntity>> {
 

@@ -1,6 +1,7 @@
 package com.algebra.moviefinder30.data.di
 
 import com.algebra.moviefinder30.data.usecase.UseCaseNetwork
+import com.algebra.moviefinder30.domain.repository.db.search.MovieSearchRepository
 import com.algebra.moviefinder30.domain.repository.network.MovieNetworkRepository
 import com.algebra.moviefinder30.domain.usecase.network.GetMovieByYear
 import com.algebra.moviefinder30.domain.usecase.network.GetMovieDetailsById
@@ -16,9 +17,9 @@ object UseCaseNetwork {
 
     @Provides
     @ViewModelScoped
-    fun provideNetworkUseCase(repo: MovieNetworkRepository) =
+    fun provideNetworkUseCase(repo: MovieNetworkRepository, repoSearch: MovieSearchRepository) =
         UseCaseNetwork(
-            GetMovieByYear(repo),
+            GetMovieByYear(repo, repoSearch),
             GetMovieDetailsById(repo)
         )
 }
