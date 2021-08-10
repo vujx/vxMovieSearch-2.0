@@ -52,9 +52,9 @@ fun exitFromApp(activity: MainActivity) {
 
 fun displayErrorMessage(throwable: Throwable, context: Context) {
     when {
-        throwable.toString().contains("NoConnectivityException") || throwable.toString().contains("No address associated with hostname") ->
+        throwable.toString().contains("NoConnectivityException") || throwable.toString().contains("UnknownHostException") ->
             displayMessage(context.getString(R.string.check_internet), context)
-        throwable.toString().contains("HTTP 404 Not Found") -> displayMessage(context.getString(R.string.movie_not_found), context)
+        throwable.message.toString().contains("HTTP 404 Not Found") -> displayMessage(context.getString(R.string.movie_not_found), context)
         else -> displayMessage(context.getString(R.string.error_message), context)
     }
 }

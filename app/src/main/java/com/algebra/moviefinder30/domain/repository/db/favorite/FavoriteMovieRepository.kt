@@ -11,6 +11,4 @@ class FavoriteMovieRepository(private val dataSource: FavoriteMovieLocalDataSour
     suspend fun removeFavoriteMovie(imdb: String) = dataSource.removeFavoriteMovie(imdb)
 
     suspend fun removeAllFavoritesMovie() = dataSource.removeAllFavoritesMovie()
-
-    suspend fun getFavoriteMovie(id: Int) = dataSource.getFavoriteMovie(id)
 }

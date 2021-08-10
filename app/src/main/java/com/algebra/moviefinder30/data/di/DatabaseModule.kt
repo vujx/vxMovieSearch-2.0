@@ -26,5 +26,5 @@ object DatabaseModule {
     fun provideFavoriteDao(database: AppDatabase): FavoriteMovieDao = database.favoriteDao()
 
     @Provides
-    fun provideSearchDao(database: AppDatabase) = database.searchHistoryDao()
+    fun provideSearchDao(database: AppDatabase) = database.searchDao()
 }

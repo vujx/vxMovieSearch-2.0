@@ -59,9 +59,8 @@ class SearchMoviesViewModel @Inject constructor(
             getAllFavoriteMovies()
         }
 
-    fun fetchMovies(searchValue: String) {
+    fun fetchMovies(searchValue: String) =
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             fetchMoviesFromDbOrApi(_movies, useCaseNetwork, searchValue)
         }
-    }
 }

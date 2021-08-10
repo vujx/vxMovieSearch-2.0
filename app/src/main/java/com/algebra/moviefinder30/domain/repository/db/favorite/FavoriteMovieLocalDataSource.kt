@@ -9,5 +9,4 @@ interface FavoriteMovieLocalDataSource {
     suspend fun getAllFavoritesMovies(): List<FavoriteMovieEntity>
     suspend fun removeFavoriteMovie(imdb: String)
     suspend fun removeAllFavoritesMovie()
-    suspend fun getFavoriteMovie(id: Int): FavoriteMovieEntity?
 }

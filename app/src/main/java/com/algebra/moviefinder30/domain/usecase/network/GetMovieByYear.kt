@@ -17,7 +17,7 @@ class GetMovieByYear(private val movieRepo: MovieNetworkRepository, private val 
                     searchRepo.insertSearchMovie(it)
                 }
                 if (movies != null) callback.onSuccess(movies)
-                else callback.onError(Throwable() as NullPointerException)
+                else callback.onError(NullPointerException())
             } else callback.onSuccess(searchMovies)
         } catch (e: Exception) {
             callback.onError(e)

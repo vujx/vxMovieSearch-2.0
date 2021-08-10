@@ -18,6 +18,4 @@ class DefaultFavoriteRepository @Inject constructor(private val favoriteMovieDao
     override suspend fun removeFavoriteMovie(imdb: String) = favoriteMovieDao.removeFavoriteMovie(imdb)
 
     override suspend fun removeAllFavoritesMovie() = favoriteMovieDao.removeAllFavoritesMovie()
-
-    override suspend fun getFavoriteMovie(id: Int): FavoriteMovieEntity? = favoriteMovieDao.getMovieEntity(id)
 }

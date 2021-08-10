@@ -4,7 +4,7 @@ import com.algebra.moviefinder30.App
 import com.algebra.moviefinder30.R
 
 fun checkValue(value: String): String =
-    if (value == "N/A") App.getResource().getString(R.string.check_value_message)
+    if (value == "N/A" || value == "") App.getResource().getString(R.string.check_value_message)
     else value
 
 fun checkYear(value: String): String =

@@ -1,10 +1,9 @@
 package com.algebra.moviefinder30.data.di
 
 import android.content.Context
-import com.algebra.moviefinder30.App
-import com.algebra.moviefinder30.R
 import com.algebra.moviefinder30.data.network.MovieService
 import com.algebra.moviefinder30.domain.network.connection.ConnectivityInterceptorImpl
+import com.algebra.moviefinder30.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +29,7 @@ object ApiServiceModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(App.getResource().getString(R.string.BASE_URL))
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()

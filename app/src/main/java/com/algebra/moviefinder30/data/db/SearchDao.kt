@@ -14,4 +14,7 @@ interface SearchDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchMovie(searchMovie: SearchEntity)
+
+    @Query("DELETE FROM SearchHistory")
+    suspend fun removeAllSearchMovies()
 }

@@ -11,7 +11,7 @@ class GetAllFavoriteMovies(private val favoriteRepo: FavoriteMovieRepository) : 
         callback: BaseUseCase.Callback<List<FavoriteMovieEntity>>
     ) {
         try {
-            val result = favoriteRepo.getAllFavoritesMovies().sortedWith(compareBy({ it.title }, { it.year }))
+            val result = favoriteRepo.getAllFavoritesMovies()
             callback.onSuccess(result)
         } catch (e: Exception) {
             callback.onError(e)

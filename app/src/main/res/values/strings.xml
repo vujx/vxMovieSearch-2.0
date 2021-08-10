@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">MovieFinder</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="BASE_URL">https://www.omdbapi.com/</string>
     <string name="movieDetails">MovieDetails</string>
     <string name="favorite">Favorite</string>
     <string name="movies">Movies</string>
@@ -16,7 +15,7 @@
     <string name="remove_fav_move_from_db">Favorite movie successfully removed!</string>
     <string name="check_year_message">Year not available</string>
     <string name="check_value_message">"Value not available!"</string>
-    <string name="error_message">Something went wrong, try again</string>
+    <string name="error_message">Something went wrong, try again!</string>
     <string name="search_message">Enter movie</string>
     <string name="movie_not_found">Movie not found, try again!</string>
     <string name="check_internet">Check you internet connection!</string>

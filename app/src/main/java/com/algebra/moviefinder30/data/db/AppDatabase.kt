@@ -9,5 +9,5 @@ import com.algebra.moviefinder30.data.model.local.SearchEntity
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteDao(): FavoriteMovieDao
-    abstract fun searchHistoryDao(): SearchDao
+    abstract fun searchDao(): SearchDao
 }

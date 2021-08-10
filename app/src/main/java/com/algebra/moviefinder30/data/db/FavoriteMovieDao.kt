@@ -12,6 +12,9 @@ interface FavoriteMovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteMovie(movie: FavoriteMovieEntity)
 
+    @Query("SELECT * FROM FavoriteMovies LIMIT 1")
+    suspend fun getFavoriteMovie(): FavoriteMovieEntity
+
     @Query("SELECT * FROM FavoriteMovies")
     suspend fun getAllFavoritesMovies(): List<FavoriteMovieEntity>
 
@@ -20,7 +23,4 @@ interface FavoriteMovieDao {
 
     @Query("DELETE FROM FavoriteMovies")
     suspend fun removeAllFavoritesMovie()
-
-    @Query("SELECT * FROM FavoriteMovies WHERE id = :id")
-    suspend fun getMovieEntity(id: Int): FavoriteMovieEntity?
 }
