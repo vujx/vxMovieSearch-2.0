@@ -29,14 +29,14 @@ class MainActivity : AppCompatActivity(), DialogListener {
         addLastDateOfClearingSearchResults()
     }
 
-    private fun compareTwoDates(lastDate: String): Long {
+    private fun compareTwoDates(lastDate: String): Double {
         val now = Calendar.getInstance().timeInMillis
-        return (now - lastDate.toLong()) / (24 * 60 * 60 * 1000)
+        return (now - lastDate.toLong()).toDouble() / (24 * 60 * 60 * 1000)
     }
 
     private fun addLastDateOfClearingSearchResults() {
         val lastDateStore = sharePreference.getString(Constants.LAST_DATE, "")
-        if (lastDateStore.isNullOrEmpty() || compareTwoDates(lastDateStore) > 6) {
+        if (lastDateStore.isNullOrEmpty() || compareTwoDates(lastDateStore) > 6.99) {
             val editor = sharePreference.edit()
             val now = Calendar.getInstance().timeInMillis
             editor.putString(Constants.LAST_DATE, now.toString())
